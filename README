@@ -207,17 +207,14 @@ KNOWN ISSUES
 SEE ALSO
         * Bing Maps Tile System
 
-          L<http://msdn.microsoft.com/en-us/library/bb259689.aspx>
+        http://msdn.microsoft.com/en-us/library/bb259689.aspx
 
 AUTHOR
     Robert Rothenberg, `<rrwo at cpan.org>'
 
 BUGS
-    Please report any bugs or feature requests to `bug-imager-bing-maplayer
-    at rt.cpan.org', or through the web interface at
-    http://rt.cpan.org/NoAuth/ReportBug.html?Queue=Imager-Bing-MapLayer. I
-    will be notified, and then you'll automatically be notified of progress
-    on your bug as I make changes.
+    Please report any bugs or feature requests to the author, or through the
+    web interface at https://github.com/robrwo/Imager-Bing-MapLayer/issues.
 
 SUPPORT
     You can find documentation for this module with the perldoc command.

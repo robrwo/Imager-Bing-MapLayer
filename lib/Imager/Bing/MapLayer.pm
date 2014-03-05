@@ -438,7 +438,7 @@ See the F<TODO> file for other known issues and unimplemented features.
 
 * Bing Maps Tile System
 
-  L<http://msdn.microsoft.com/en-us/library/bb259689.aspx>
+L<http://msdn.microsoft.com/en-us/library/bb259689.aspx>
 
 =back
 
@@ -448,9 +448,9 @@ Robert Rothenberg, C<< <rrwo at cpan.org> >>
 
 =head1 BUGS
 
-Please report any bugs or feature requests to C<bug-imager-bing-maplayer at rt.cpan.org>, or through
-the web interface at L<http://rt.cpan.org/NoAuth/ReportBug.html?Queue=Imager-Bing-MapLayer>.  I will be notified, and then you'll
-automatically be notified of progress on your bug as I make changes.
+Please report any bugs or feature requests to the author, or through
+the web interface at
+L<https://github.com/robrwo/Imager-Bing-MapLayer/issues>.
 
 =head1 SUPPORT
 
