@@ -32,13 +32,13 @@ use version 0.77; our $VERSION = version->declare('v0.1.0');
 =head1 SYNOPSIS
 
     my $layer = Imager::Bing::MapLayer->new(
-      base_dir           => $dir,          # base directory (default '.')
-      overwrite          => 1,             # overwrite existing (default)
-      autosave           => 1,             # save on exit (default)
-      in_memory          => 0,             # keep tiles in memory (default false)
-      min_level          => 1,             # min zoom level (default)
-      max_level          => 19,            # max zoom level (default)
-      combine            => 'darken',      # tile composition method (default)
+      base_dir           => $dir,     # base directory (default '.')
+      overwrite          => 1,        # overwrite existing (default)
+      autosave           => 1,        # save on exit (default)
+      in_memory          => 0,        # keep tiles in memory (default false)
+      min_level          => 1,        # min zoom level (default)
+      max_level          => 19,       # max zoom level (default)
+      combine            => 'darken', # tile composition method (default)
     );
 
     # Plot polygons (e.g. postcodes)
@@ -51,10 +51,10 @@ use version 0.77; our $VERSION = version->declare('v0.1.0');
     # Plot greyscale gradient circles for heatmaps
 
     $layer->radial_circle(
-        r      => 100,                     # radius in meters
-        -min_r => 1,                       # minimum pixel radius for any zoom level
-        x      => $longitude,
-        y      => $latitude,
+        r      => 100,              # radius in meters
+        -min_r => 1,                # minimum pixel radius for any zoom level
+        x      => $longitude,       # longitude (x = east-west)
+        y      => $latitude,        # latitude  (y = north-south)
     );
 
     # Blur filter
