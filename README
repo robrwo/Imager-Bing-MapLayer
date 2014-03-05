@@ -92,26 +92,6 @@ METHODS
   max_level
     The maximum zoom level to generate.
 
-  `_make_imager_wrapper_method'
-        __PACKAGE__->_make_imager_wrapper_method( { name => $method } );
-
-    This is an *internal* method for generating wrapper Imagers::Draw
-    methods that are applied to every level.
-
-    These methods use latitude and longitude in lieau of `y' and `x'
-    parameters. Note that `points' parameters contain pairs of latitude and
-    longitude coordinates, *not* longitude and latitude coordinates!
-
-    See Imager::Draw for documentation of the methods.
-
-    We've added the following additional arguments:
-
-    `-min_level'
-        The minimum zoom level to draw on.
-
-    `-max_level'
-        The maximum zoom level to draw on.
-
   `radial_circle'
         $layer->radial_circle(
             r      => $radius_in_meters,

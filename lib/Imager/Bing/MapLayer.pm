@@ -249,6 +249,8 @@ has 'max_level' => (
     default => sub {$MAX_ZOOM_LEVEL},
 );
 
+=begin internal
+
 =head2 C<_make_imager_wrapper_method>
 
     __PACKAGE__->_make_imager_wrapper_method( { name => $method } );
@@ -275,6 +277,8 @@ The minimum zoom level to draw on.
 The maximum zoom level to draw on.
 
 =back
+
+=end internal
 
 =cut
 
