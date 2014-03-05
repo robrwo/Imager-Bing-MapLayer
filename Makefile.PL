@@ -4,7 +4,7 @@ use warnings FATAL => 'all';
 use inc::Module::Install;
 
 name     'Imager-Bing-MapLayer';
-all_from 'lib/Imager/Bing/MapLayer.pm';
+version_from 'lib/Imager/Bing/MapLayer.pm';
 author   q{Robert Rothenberg <rrwo@cpan.org>};
 license  'artistic2';
 
