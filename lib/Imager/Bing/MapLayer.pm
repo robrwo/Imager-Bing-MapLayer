@@ -462,24 +462,11 @@ You can also look for information at:
 
 =over 4
 
-=item * RT: CPAN's request tracker (report bugs here)
+=item * GitHub
 
-L<http://rt.cpan.org/NoAuth/Bugs.html?Dist=Imager-Bing-MapLayer>
-
-=item * AnnoCPAN: Annotated CPAN documentation
-
-L<http://annocpan.org/dist/Imager-Bing-MapLayer>
-
-=item * CPAN Ratings
-
-L<http://cpanratings.perl.org/d/Imager-Bing-MapLayer>
-
-=item * Search CPAN
-
-L<http://search.cpan.org/dist/Imager-Bing-MapLayer/>
+L<https://github.com/robrwo/Imager-Bing-MapLayer>
 
 =back
-
 
 =head1 ACKNOWLEDGEMENTS
 

@@ -226,17 +226,8 @@ SUPPORT
 
     You can also look for information at:
 
-    * RT: CPAN's request tracker (report bugs here)
-        http://rt.cpan.org/NoAuth/Bugs.html?Dist=Imager-Bing-MapLayer
-
-    * AnnoCPAN: Annotated CPAN documentation
-        http://annocpan.org/dist/Imager-Bing-MapLayer
-
-    * CPAN Ratings
-        http://cpanratings.perl.org/d/Imager-Bing-MapLayer
-
-    * Search CPAN
-        http://search.cpan.org/dist/Imager-Bing-MapLayer/
+    * GitHub
+        https://github.com/robrwo/Imager-Bing-MapLayer
 
 ACKNOWLEDGEMENTS
     *   Foxtons, Ltd.

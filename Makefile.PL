@@ -17,7 +17,7 @@ resources (
    homepage   => 'http://rrwo.tumblr.com',
    license    => 'artistic2',
    repository => 'git://github.com/robrwo/Imager-Bing-MapLayer.git',
-   bugtracker => 'http://rt.cpan.org/NoAuth/Bugs.html?Dist=Imager-Bing-MapLayer',
+   bugtracker => 'https://github.com/robrwo/Imager-Bing-MapLayer/issues',
 );
 
 configure_requires (
