@@ -80,16 +80,16 @@ ATTRIBUTES
     The tile combination method. It defaults to `darken'.
 
 METHODS
-  <levels>
+  `levels'
       my @levels = @{ $layer->levels };
 
     This returns a reference to a list of Imager::Bing::MapLayer::Level
     objects.
 
-  min_level
+  `min_level'
     The minimum zoom level to generate.
 
-  max_level
+  `max_level'
     The maximum zoom level to generate.
 
   `radial_circle'

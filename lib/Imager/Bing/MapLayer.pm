@@ -180,7 +180,7 @@ has 'combine' => (
 
 =head1 METHODS
 
-=head2 <levels>
+=head2 C<levels>
 
   my @levels = @{ $layer->levels };
 
@@ -219,7 +219,7 @@ has 'levels' => (
     },
 );
 
-=head2 min_level
+=head2 C<min_level>
 
 The minimum zoom level to generate.
 
@@ -234,7 +234,7 @@ has 'min_level' => (
     default => sub {$MIN_ZOOM_LEVEL},
 );
 
-=head2 max_level
+=head2 C<max_level>
 
 The maximum zoom level to generate.
 
