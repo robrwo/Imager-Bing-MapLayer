@@ -431,8 +431,8 @@ sub save {
 
 =head1 KNOWN ISSUES
 
-For plotting very large polylines and polygones (e.g. postcode
-district C<E17>), the system will die with no error message.
+For plotting very large polylines and polygons, the system will die
+with no error message.
 
 See the F<TODO> file for other known issues and unimplemented features.
 
@@ -492,4 +492,4 @@ This program is released under the following license: atistic2
 
 use namespace::autoclean;
 
-1; # End of Imager::Bing::MapLayer
+1;    # End of Imager::Bing::MapLayer
