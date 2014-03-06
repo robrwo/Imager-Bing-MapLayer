@@ -23,11 +23,11 @@ Imager::Bing::MapLayer - create a map layer for Bing Maps
 
 =head1 VERSION
 
-Version v0.1.0
+Version v0.1.1
 
 =cut
 
-use version 0.77; our $VERSION = version->declare('v0.1.0');
+use version 0.77; our $VERSION = version->declare('v0.1.1');
 
 =head1 SYNOPSIS
 

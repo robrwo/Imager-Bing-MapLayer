@@ -2,7 +2,7 @@ NAME
     Imager::Bing::MapLayer - create a map layer for Bing Maps
 
 VERSION
-    Version v0.1.0
+    Version v0.1.1
 
 SYNOPSIS
         my $layer = Imager::Bing::MapLayer->new(
