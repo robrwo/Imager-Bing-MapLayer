@@ -41,7 +41,7 @@ use version 0.77; our $VERSION = version->declare('v0.1.0');
       combine            => 'darken', # tile composition method (default)
     );
 
-    # Plot polygons (e.g. postcodes)
+    # Plot polygons (e.g. geographic boundaries)
 
     $layer->polygon(
        points => $points,                  # listref to [ lat, lon ] points

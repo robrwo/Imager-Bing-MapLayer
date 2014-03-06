@@ -538,13 +538,12 @@ sub _make_imager_wrapper_method {
             # We create a temporary image and draw on it. We then
             # compose the appropriate pieces of that image on each
             # tile.  This is faster than drawing the image on every
-            # tile, for complex polylines and polygons like postcode
+            # tile, for complex polylines and polygons like geographic
             # boundaries.
 
-            # TODO - for very large polyones (e.g. E17), this will
-            # require images that are too large for higher zoom
-            # levels. We need to modify this to render images on
-            # multiple pseudo-tiles.
+            # TODO - for very large polygons, this will require images
+            # that are too large for higher zoom levels. We need to
+            # modify this to render images on multiple pseudo-tiles.
 
             # TODO - get* methods should be handled differently.
 
