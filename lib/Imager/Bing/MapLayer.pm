@@ -74,6 +74,8 @@ coordinates.
 The module will automatically map them to the appropriate points on
 tile files.
 
+=for readme stop
+
 =head1 ATTRIBUTES
 
 =cut
@@ -435,6 +437,8 @@ For plotting very large polylines and polygons, the system will die
 with no error message.
 
 See the F<TODO> file for other known issues and unimplemented features.
+
+=for readme continue
 
 =head1 SEE ALSO
 
