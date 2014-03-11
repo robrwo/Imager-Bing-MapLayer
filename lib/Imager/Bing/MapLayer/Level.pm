@@ -23,6 +23,8 @@ use Imager::Bing::MapLayer::Utils qw/
 use aliased 'Imager::Bing::MapLayer::Image';
 use aliased 'Imager::Bing::MapLayer::Tile';
 
+use version 0.77; our $VERSION = version->declare('v0.1.2');
+
 =head1 NAME
 
 Imager::Bing::MapLayer::Level - zoom levels for Bing Maps

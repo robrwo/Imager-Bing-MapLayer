@@ -22,9 +22,7 @@ use Imager::Bing::MapLayer::Utils qw/
     tile_coords_to_quad_key quad_key_to_tile_coords
     /;
 
-our $VERSION = 1.00;
-
-use namespace::autoclean;
+use version 0.77; our $VERSION = version->declare('v0.1.2');
 
 =head1 SYNOPSIS
 
@@ -284,5 +282,7 @@ sub DEMOLISH {
     my ($self) = @_;
     $self->save if ( $self->autosave );
 }
+
+use namespace::autoclean;
 
 1;
