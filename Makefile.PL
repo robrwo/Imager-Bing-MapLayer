@@ -20,9 +20,7 @@ resources (
    bugtracker => 'https://github.com/robrwo/Imager-Bing-MapLayer/issues',
 );
 
-configure_requires (
-   'Module::Install' => 0,
-);
+configure_requires ();
 
 build_requires (
     'File::Find::Rule' => 0,
