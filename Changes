@@ -1,5 +1,11 @@
 Revision history for Imager-Bing-MapLayer
 
+v0.1.2  2014-03-11
+
+  - Removed unnecessary dependency on Module::Install (GitHub #3)
+
+  - Fixed inconsistent/missing versions between modules.
+
 v0.1.1  2014-03-10
 
   - README now excludes unnecessary details.
