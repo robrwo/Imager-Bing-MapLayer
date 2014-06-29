@@ -21,13 +21,9 @@ use aliased 'Imager::Bing::MapLayer::Level';
 
 Imager::Bing::MapLayer - create a map layer for Bing Maps
 
-=head1 VERSION
-
-Version v0.1.2
-
 =cut
 
-use version 0.77; our $VERSION = version->declare('v0.1.2');
+use version 0.77; our $VERSION = version->declare('v0.1.3');
 
 =head1 SYNOPSIS
 
