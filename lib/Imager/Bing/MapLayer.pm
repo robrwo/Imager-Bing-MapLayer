@@ -13,21 +13,18 @@ use MooseX::StrictConstructor;
 
 use Imager::Bing::MapLayer::Utils qw/
     $MIN_ZOOM_LEVEL $MAX_ZOOM_LEVEL
+    tile_class_type
     /;
 
-use aliased 'Imager::Bing::MapLayer::Level';
+use Imager::Bing::MapLayer::Level;
 
 =head1 NAME
 
 Imager::Bing::MapLayer - create a map layer for Bing Maps
 
-=head1 VERSION
-
-Version v0.1.2
-
 =cut
 
-use version 0.77; our $VERSION = version->declare('v0.1.2');
+use version 0.77; our $VERSION = version->declare('v0.1.3');
 
 =head1 SYNOPSIS
 
@@ -180,6 +177,18 @@ has 'combine' => (
     default => sub { return 'darken'; },
 );
 
+=head2 C<tile_class>
+
+The base class used for tiles.
+
+=cut
+
+has 'tile_class' => (
+    is      => 'ro',
+    isa     => tile_class_type(),
+    default => sub { 'Imager::Bing::MapLayer::Tile' },
+);
+
 =head1 METHODS
 
 =head2 C<levels>
@@ -205,7 +214,7 @@ has 'levels' => (
 
         foreach my $level ( $self->min_level .. $self->max_level ) {
             push @levels,
-                Level->new(
+                Imager::Bing::MapLayer::Level->new(
                 level              => $level,
                 base_dir           => $self->base_dir,
                 centroid_latitude  => $self->centroid_latitude,
@@ -214,6 +223,7 @@ has 'levels' => (
                 autosave           => $self->autosave,
                 in_memory          => $self->in_memory,
                 combine            => $self->combine,
+                tile_class         => $self->tile_class,
                 );
         }
 

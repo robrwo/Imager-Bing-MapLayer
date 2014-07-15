@@ -17,13 +17,13 @@ use POSIX::2008 qw/ round /;
 use Imager::Bing::MapLayer::Utils qw/
     $MIN_ZOOM_LEVEL $MAX_ZOOM_LEVEL $TILE_WIDTH $TILE_HEIGHT
     width_at_level bounding_box pixel_to_tile_coords tile_coords_to_quad_key
-    optimize_points get_ground_resolution
+    optimize_points get_ground_resolution tile_class_type
     /;
 
-use aliased 'Imager::Bing::MapLayer::Image';
-use aliased 'Imager::Bing::MapLayer::Tile';
+use Imager::Bing::MapLayer::Image;
+use Imager::Bing::MapLayer::Tile;
 
-use version 0.77; our $VERSION = version->declare('v0.1.2');
+use version 0.77; our $VERSION = version->declare('v0.1.3');
 
 =head1 NAME
 
@@ -194,6 +194,20 @@ has 'combine' => (
     default => sub { return 'darken'; },
 );
 
+=head2 C<tile_class>
+
+The base class used for tiles.
+
+=cut
+
+has 'tile_class' => (
+    is      => 'ro',
+    isa     => tile_class_type(),
+    default => sub { 'Imager::Bing::MapLayer::Tile' },
+);
+
+=head1 METHODS
+
 =head2 C<width>
 
 The width of the layer.
@@ -215,8 +229,6 @@ sub height {
     my ($self) = @_;
     return width_at_level( $self->level );
 }
-
-=head1 METHODS
 
 =head2 C<latlon_to_pixel>
 
@@ -440,7 +452,9 @@ exists. Otherwise it creates a new tile.
 sub _load_tile {
     my ( $self, $tile_x, $tile_y, $overwrite ) = @_;
 
-    return Tile->new(
+    my $class = $self->tile_class;
+
+    return $class->new(
         quad_key => tile_coords_to_quad_key( $self->level, $tile_x, $tile_y ),
         base_dir => $self->base_dir,
         overwrite => $overwrite,
@@ -551,7 +565,7 @@ sub _make_imager_wrapper_method {
 
             # Note: Try::Tiny does not catch malloc errors
 
-            my $image = Image->new(
+            my $image = Imager::Bing::MapLayer::Image->new(
                 pixel_origin => [ $left, $top ],
                 width        => 1 + $right - $left,
                 height       => 1 + $bottom - $top,

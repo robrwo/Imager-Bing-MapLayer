@@ -3,3 +3,5 @@
 ~$
 \.bak$
 Imager-Bing-MapLayer-.*\.tar\.gz
+
+^\.travis\.yml$

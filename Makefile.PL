@@ -33,7 +33,6 @@ build_requires (
 );
 
 requires (
-    'aliased'                      => 0,
     'Carp'                         => 0,
     'Class::MOP::Method'           => 0,
     'Const::Fast'                  => 0,
@@ -44,11 +43,17 @@ requires (
     'List::Util'                   => 1.30,
     'Path::Class'                  => 0,
     'POSIX::2008'                  => 0,
+    'Module::Load'                 => 0,
     'Moose'                        => 0,
     'Moose::Util::TypeConstraints' => 0,
     'MooseX::StrictConstructor'    => 0,
     'namespace::autoclean'         => 0,
+    'Type::Tiny'                   => 0,
     'version'                      => 0.77,
+);
+
+recommends (
+    'Type::Tiny::XS'               => 0,
 );
 
 install_as_cpan;
