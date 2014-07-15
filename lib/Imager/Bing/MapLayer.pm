@@ -13,6 +13,7 @@ use MooseX::StrictConstructor;
 
 use Imager::Bing::MapLayer::Utils qw/
     $MIN_ZOOM_LEVEL $MAX_ZOOM_LEVEL
+    tile_class_type
     /;
 
 use Imager::Bing::MapLayer::Level;
@@ -184,7 +185,7 @@ The base class used for tiles.
 
 has 'tile_class' => (
     is      => 'ro',
-    isa     => 'Str',
+    isa     => tile_class_type(),
     default => sub { 'Imager::Bing::MapLayer::Tile' },
 );
 
