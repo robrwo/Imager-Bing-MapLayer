@@ -52,6 +52,10 @@ requires (
     'version'                      => 0.77,
 );
 
+recommends (
+    'Type::Tiny::XS'               => 0,
+);
+
 install_as_cpan;
 auto_install;
 WriteAll;
