@@ -22,7 +22,7 @@ use Imager::Bing::MapLayer::Utils qw/
     tile_coords_to_quad_key quad_key_to_tile_coords
     /;
 
-use version 0.77; our $VERSION = version->declare('v0.1.2');
+use version 0.77; our $VERSION = version->declare('v0.1.3');
 
 =head1 SYNOPSIS
 

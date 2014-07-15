@@ -23,7 +23,7 @@ use Imager::Bing::MapLayer::Utils qw/
 use Imager::Bing::MapLayer::Image;
 use Imager::Bing::MapLayer::Tile;
 
-use version 0.77; our $VERSION = version->declare('v0.1.2');
+use version 0.77; our $VERSION = version->declare('v0.1.3');
 
 =head1 NAME
 

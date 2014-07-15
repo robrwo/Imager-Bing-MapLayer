@@ -20,6 +20,8 @@ use Path::Class qw/ file /;
 
 use namespace::autoclean;
 
+use version 0.77; our $VERSION = version->declare('v0.1.3');
+
 =head1 NAME
 
 Imager::Bing::MapLayer::Image - a wrapper for L<Imager> objects

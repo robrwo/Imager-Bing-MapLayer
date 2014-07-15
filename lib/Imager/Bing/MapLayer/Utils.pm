@@ -23,7 +23,7 @@ use Const::Fast;
 use List::MoreUtils qw/ minmax /;
 use POSIX::2008 qw/ round /;
 
-use version 0.77; our $VERSION = version->declare('v0.1.2');
+use version 0.77; our $VERSION = version->declare('v0.1.3');
 
 =head1 NAME
 
