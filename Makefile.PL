@@ -33,7 +33,6 @@ build_requires (
 );
 
 requires (
-    'aliased'                      => 0,
     'Carp'                         => 0,
     'Class::MOP::Method'           => 0,
     'Const::Fast'                  => 0,
