@@ -20,7 +20,7 @@ use Path::Class qw/ file /;
 
 use namespace::autoclean;
 
-use version 0.77; our $VERSION = version->declare('v0.1.3');
+use version 0.77; our $VERSION = version->declare('v0.1.4');
 
 =head1 NAME
 

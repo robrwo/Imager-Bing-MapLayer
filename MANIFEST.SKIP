@@ -2,10 +2,13 @@
 \.gitignore
 ~$
 \.bak$
+\.old$
 Imager-Bing-MapLayer-.*\.tar\.gz
+Imager-Bing-MapLayer-.*/
 
 ^\.travis\.yml$
 
 # Exclude QA tests
 
 ^xt/
+

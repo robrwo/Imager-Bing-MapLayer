@@ -17,13 +17,13 @@ use POSIX::2008 qw/ round /;
 use Imager::Bing::MapLayer::Utils qw/
     $MIN_ZOOM_LEVEL $MAX_ZOOM_LEVEL $TILE_WIDTH $TILE_HEIGHT
     width_at_level bounding_box pixel_to_tile_coords tile_coords_to_quad_key
-    optimize_points get_ground_resolution tile_class_type
+    optimize_points get_ground_resolution _tile_class_type
     /;
 
 use Imager::Bing::MapLayer::Image;
 use Imager::Bing::MapLayer::Tile;
 
-use version 0.77; our $VERSION = version->declare('v0.1.3');
+use version 0.77; our $VERSION = version->declare('v0.1.4');
 
 =head1 NAME
 
@@ -202,7 +202,7 @@ The base class used for tiles.
 
 has 'tile_class' => (
     is      => 'ro',
-    isa     => tile_class_type(),
+    isa     => _tile_class_type(),
     default => sub { 'Imager::Bing::MapLayer::Tile' },
 );
 

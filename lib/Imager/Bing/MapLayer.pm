@@ -13,7 +13,7 @@ use MooseX::StrictConstructor;
 
 use Imager::Bing::MapLayer::Utils qw/
     $MIN_ZOOM_LEVEL $MAX_ZOOM_LEVEL
-    tile_class_type
+    _tile_class_type
     /;
 
 use Imager::Bing::MapLayer::Level;
@@ -24,7 +24,7 @@ Imager::Bing::MapLayer - create a map layer for Bing Maps
 
 =cut
 
-use version 0.77; our $VERSION = version->declare('v0.1.3');
+use version 0.77; our $VERSION = version->declare('v0.1.4');
 
 =head1 SYNOPSIS
 
@@ -185,7 +185,7 @@ The base class used for tiles.
 
 has 'tile_class' => (
     is      => 'ro',
-    isa     => tile_class_type(),
+    isa     => _tile_class_type(),
     default => sub { 'Imager::Bing::MapLayer::Tile' },
 );
 
