@@ -8,6 +8,8 @@ v0.1.5
 
   - Internal code refactoring.
 
+  - Minor POD tweaks/typo fixes.
+
 v0.1.4  2014-07-18
 
   - Added missing prereq for tests.

@@ -50,8 +50,6 @@ has 'quad_key' => (
 );
 
 
-=head1 METHODS
-
 =head2 C<level>
 
 The zoom level for this tile.  It is determined by the L</quad_key>.
@@ -191,6 +189,8 @@ has 'filename' => (
         return file( $self->base_dir, $self->quad_key . '.png' )->stringify;
     },
 );
+
+=head1 METHODS
 
 =head2 C<latlon_to_pixel>
 
