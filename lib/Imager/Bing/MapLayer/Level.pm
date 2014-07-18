@@ -102,6 +102,7 @@ has 'tiles' => (
     is      => 'ro',
     isa     => 'HashRef',
     default => sub { return {} },
+    init_arg => undef,
 );
 
 =head2 C<timeouts>

@@ -56,10 +56,6 @@ The zoom level for this tile.  It is determined by the L</quad_key>.
 
 =cut
 
-# Yes, some of the methods below are written as attributes rather.
-# But as attributes, the values are cached.  Don't use them as an
-# attribute!
-
 has 'level' => (
     is      => 'ro',
     isa     => 'Int',
@@ -68,6 +64,7 @@ has 'level' => (
         return length( $self->quad_key );
     },
     lazy => 1,
+    init_arg => undef,
 );
 
 =head2 C<tile_coords>
@@ -85,6 +82,7 @@ has 'tile_coords' => (
         return [ ( quad_key_to_tile_coords( $self->quad_key ) )[ 0, 1 ] ],;
     },
     lazy => 1,
+    init_arg => undef,
 );
 
 =head2 C<pixel_origin>
@@ -103,6 +101,7 @@ has 'pixel_origin' => (
         return [ tile_coords_to_pixel_origin( @{$tile_coords} ) ],;
     },
     lazy => 1,
+    init_arg => undef,
 );
 
 =head2 C<width>
@@ -113,9 +112,9 @@ The width of the tile.
 
 has 'width' => (
     is  => 'ro',
-    isa => subtype( as 'Int', where { $_ == $TILE_WIDTH }, ),
     default => sub { return $TILE_WIDTH },
     lazy    => 1,
+    init_arg => undef,
 );
 
 =head2 C<height>
@@ -126,9 +125,9 @@ The height of the tile.
 
 has 'height' => (
     is  => 'ro',
-    isa => subtype( as 'Int', where { $_ == $TILE_HEIGHT }, ),
     default => sub { return $TILE_HEIGHT },
     lazy    => 1,
+    init_arg => undef,
 );
 
 =head2 C<image>
@@ -172,6 +171,7 @@ has 'image' => (
 
         return $image;
     },
+    init_arg => undef,
 );
 
 =head2 C<filename>
@@ -188,6 +188,7 @@ has 'filename' => (
         my ($self) = @_;
         return file( $self->base_dir, $self->quad_key . '.png' )->stringify;
     },
+    init_arg => undef,
 );
 
 =head1 METHODS
