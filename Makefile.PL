@@ -23,6 +23,7 @@ resources (
 configure_requires ();
 
 build_requires (
+    'aliased'          => 0,
     'File::Find::Rule' => 0,
     'File::Temp'       => 0,
     'Image::Size'      => 0,
