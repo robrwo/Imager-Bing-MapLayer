@@ -3,6 +3,7 @@ package Imager::Bing::MapLayer::Level;
 use v5.10.1;
 
 use Moose;
+with 'Imager::Bing::MapLayer::Role::TileClass';
 
 use Carp qw/ confess /;
 use Class::MOP::Method;
@@ -17,7 +18,7 @@ use POSIX::2008 qw/ round /;
 use Imager::Bing::MapLayer::Utils qw/
     $MIN_ZOOM_LEVEL $MAX_ZOOM_LEVEL $TILE_WIDTH $TILE_HEIGHT
     width_at_level bounding_box pixel_to_tile_coords tile_coords_to_quad_key
-    optimize_points get_ground_resolution _tile_class_type
+    optimize_points get_ground_resolution
     /;
 
 use Imager::Bing::MapLayer::Image;
@@ -192,18 +193,6 @@ has 'combine' => (
     is      => 'ro',
     isa     => 'Str',
     default => sub { return 'darken'; },
-);
-
-=head2 C<tile_class>
-
-The base class used for tiles.
-
-=cut
-
-has 'tile_class' => (
-    is      => 'ro',
-    isa     => _tile_class_type(),
-    default => sub { 'Imager::Bing::MapLayer::Tile' },
 );
 
 =head1 METHODS

@@ -13,6 +13,7 @@ inc/Module/Install/WriteAll.pm
 lib/Imager/Bing/MapLayer.pm
 lib/Imager/Bing/MapLayer/Image.pm
 lib/Imager/Bing/MapLayer/Level.pm
+lib/Imager/Bing/MapLayer/Role/TileClass.pm
 lib/Imager/Bing/MapLayer/Tile.pm
 lib/Imager/Bing/MapLayer/Utils.pm
 Makefile.PL

@@ -3,6 +3,7 @@ package Imager::Bing::MapLayer;
 use v5.10.1;
 
 use Moose;
+with 'Imager::Bing::MapLayer::Role::TileClass';
 
 use Carp qw/ confess /;
 use Class::MOP::Method;
@@ -13,7 +14,6 @@ use MooseX::StrictConstructor;
 
 use Imager::Bing::MapLayer::Utils qw/
     $MIN_ZOOM_LEVEL $MAX_ZOOM_LEVEL
-    _tile_class_type
     /;
 
 use Imager::Bing::MapLayer::Level;
@@ -208,12 +208,6 @@ You might use something like:
 
 
 =cut
-
-has 'tile_class' => (
-    is      => 'ro',
-    isa     => _tile_class_type(),
-    default => sub { 'Imager::Bing::MapLayer::Tile' },
-);
 
 =head1 METHODS
 
