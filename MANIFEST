@@ -23,4 +23,5 @@ README
 t/layer.t
 t/level.t
 t/tile.t
+t/tile_subclass.t
 t/utils.t

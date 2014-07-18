@@ -1,5 +1,9 @@
 Revision history for Imager-Bing-MapLayer
 
+  - Added test for tile subclassing.
+
+  - Added example of subclassing to the POD.
+
 v0.1.4  2014-07-18
 
   - Added missing prereq for tests.

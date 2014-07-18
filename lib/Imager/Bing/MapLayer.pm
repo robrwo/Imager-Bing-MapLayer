@@ -181,6 +181,32 @@ has 'combine' => (
 
 The base class used for tiles.
 
+This can be used to subclass the tiles, for instance, to save tiles
+with a different filename to use with something other than Bing maps,
+e.g. Google Maps.
+
+You might use something like:
+
+  package MyTile;
+
+  use Moose;
+  extends 'Imager::Bing::MapLayer::Tile';
+
+  use Path::Class;
+
+  has 'filename' => (
+    is      => 'ro',
+    isa     => 'Str',
+    lazy    => 1,
+    default => sub {
+        my ($self) = @_;
+	my $file = file($self->base_dir, $self->level,
+			join(',', @{ $self->tile_coords }) . '.png');
+        return $file->stringify;
+    },
+  );
+
+
 =cut
 
 has 'tile_class' => (
