@@ -10,6 +10,8 @@ use MooseX::StrictConstructor;
 
 use Moose::Util::TypeConstraints;
 
+use version 0.77; our $VERSION = version->declare('v0.1.5');
+
 =head2 C<base_dir>
 
 The base directory that tiles are saved in.
