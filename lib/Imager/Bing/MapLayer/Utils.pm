@@ -30,7 +30,7 @@ use Module::Load qw/ load /;
 use POSIX::2008 qw/ round /;
 use Type::Tiny;
 
-use version 0.77; our $VERSION = version->declare('v0.1.3');
+use version 0.77; our $VERSION = version->declare('v0.1.4');
 
 =head1 NAME
 

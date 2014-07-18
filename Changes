@@ -1,5 +1,7 @@
 Revision history for Imager-Bing-MapLayer
 
+v0.1.4  2014-07-18
+
   - Added missing prereq for tests.
 
   - Tweaked MANIFEST rules.
