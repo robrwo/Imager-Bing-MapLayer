@@ -19,7 +19,7 @@ our @EXPORT_OK = (
         tile_coords_to_quad_key quad_key_to_tile_coords
         bounding_box optimize_points
         get_ground_resolution get_map_scale
-        tile_class_type
+        _tile_class_type
         /
 );
 
@@ -364,7 +364,7 @@ sub optimize_points {
     return \@list;
 }
 
-sub tile_class_type {
+sub _tile_class_type {
     state $type = Type::Tiny->new(
         name       => 'TileClass',
         constraint => sub {
