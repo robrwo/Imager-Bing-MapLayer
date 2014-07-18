@@ -9,7 +9,28 @@ use Moose::Role;
 use Type::Tiny;
 use Module::Load qw/ load /;
 
+=head1 NAME
+
+Imager::Bing::MapLayer::Role::TileClass - a tile class role
+
+=cut
+
 use version 0.77; our $VERSION = version->declare('v0.1.5');
+
+=head1 DESCRIPTION
+
+This is an internal role.
+
+=head1 ATTRIBUTES
+
+=head2 C<tile_class>
+
+The base class used for tiles.
+
+See L<Imager::Bing::MapLayer> for an explanation of how to subclass
+tiles.
+
+=cut
 
 state $Type = Type::Tiny->new(
     name       => 'TileClass',
@@ -22,12 +43,6 @@ state $Type = Type::Tiny->new(
 	"$_ must be a Imager::Bing::MapLayer::Tile";
     },
     );
-
-=head2 C<tile_class>
-
-The base class used for tiles.
-
-=cut
 
 has 'tile_class' => (
     is      => 'ro',
