@@ -24,7 +24,7 @@ Imager::Bing::MapLayer - create a map layer for Bing Maps
 
 =cut
 
-use version 0.77; our $VERSION = version->declare('v0.1.4');
+use version 0.77; our $VERSION = version->declare('v0.1.5');
 
 =head1 SYNOPSIS
 
