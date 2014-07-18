@@ -7,16 +7,13 @@ use MooseX::StrictConstructor;
 
 use Moose::Util::TypeConstraints;
 
-use Carp qw/ carp confess /;
 use Class::MOP::Method;
 use Const::Fast;
-use Cwd;
 use Imager;
 use Imager::Color;
 use Imager::Fill;
 use Imager::Fountain;
 use List::Util 1.30 qw/ min pairmap /;
-use Path::Class qw/ file /;
 
 use namespace::autoclean;
 
