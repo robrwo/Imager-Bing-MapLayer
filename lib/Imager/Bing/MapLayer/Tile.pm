@@ -1,15 +1,15 @@
 package Imager::Bing::MapLayer::Tile;
 
 use Moose;
-use MooseX::StrictConstructor;
+with 'Imager::Bing::MapLayer::Role::FileHandling';
 
+use MooseX::StrictConstructor;
 use Moose::Util::TypeConstraints;
 
 extends 'Imager::Bing::MapLayer::Image';
 
 use Carp qw/ carp confess /;
 use Class::MOP::Method;
-use Cwd;
 use Imager;
 use List::Util 1.30 qw/ pairmap /;
 use Path::Class qw/ file /;
@@ -49,46 +49,6 @@ has 'quad_key' => (
     required => 1,
 );
 
-=head2 C<base_dir>
-
-The base directory that tiles are saved in.
-
-=cut
-
-has 'base_dir' => (
-    is  => 'ro',
-    isa => subtype( as 'Str', where { -d $_ }, ),
-    default => sub { return getcwd; },
-);
-
-=head2 C<overwrite>
-
-If true (default), overwrite existing tile files.
-
-Note that re-running a process to generate a tole on an existing file
-is not an idemportent operation: opaque overlays and anti-aliasing
-will darken a region instead of recreating a set image.
-
-=cut
-
-has 'overwrite' => (
-    is      => 'ro',
-    isa     => 'Bool',
-    default => sub { return 1; },
-);
-
-=head2 C<autosave>
-
-If true (default), automatically save the tiles when the object is
-destroyed.
-
-=cut
-
-has 'autosave' => (
-    is      => 'ro',
-    isa     => 'Bool',
-    default => sub { return 1; },
-);
 
 =head1 METHODS
 

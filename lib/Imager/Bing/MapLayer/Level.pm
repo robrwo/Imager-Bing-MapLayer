@@ -4,11 +4,11 @@ use v5.10.1;
 
 use Moose;
 with 'Imager::Bing::MapLayer::Role::TileClass';
+with 'Imager::Bing::MapLayer::Role::FileHandling';
 
 use Carp qw/ confess /;
 use Class::MOP::Method;
 use Const::Fast;
-use Cwd;
 use Imager;
 use List::Util qw/ min max /;
 use Moose::Util::TypeConstraints;
@@ -62,18 +62,6 @@ has 'level' => (
         as 'Int',
         where { ( $_ >= $MIN_ZOOM_LEVEL ) && ( $_ <= $MAX_ZOOM_LEVEL ) }
     ),
-);
-
-=head2 C<base_dir>
-
-The base directory to save tile files in.
-
-=cut
-
-has 'base_dir' => (
-    is  => 'ro',
-    isa => subtype( as 'Str', where { -d $_ }, ),
-    default => sub { return getcwd; },
 );
 
 =head2 C<centroid_latitude>
@@ -138,22 +126,6 @@ has 'last_cleanup_time' => (
     default => sub { return time; },
 );
 
-=head2 C<overwrite>
-
-When true (default), existing tiles will be overwritten rather than
-edited.
-
-Be wary of editing existing tiles, since antialiased lines and opaque
-fills will darken existing points rather than drawing over them.
-
-=cut
-
-has 'overwrite' => (
-    is      => 'ro',
-    isa     => 'Bool',
-    default => sub { return 1; },
-);
-
 =head2 C<in_memory>
 
 The timeout for how many seconds a tile is kept in memory.
@@ -169,20 +141,6 @@ has 'in_memory' => (
     default => sub { return 0; },
 );
 
-=head2 C<autosave>
-
-When true (default), tiles will be automatically saved.
-
-Alternatively, you can use the L</save> method.
-
-=cut
-
-has 'autosave' => (
-    is      => 'ro',
-    isa     => 'Bool',
-    default => sub { return 1; },
-);
-
 =head2 C<combine>
 
 The tile combination method. It defaults to C<darken>.
@@ -194,6 +152,10 @@ has 'combine' => (
     isa     => 'Str',
     default => sub { return 'darken'; },
 );
+
+=head2 C<tile_class>
+
+The base class used for tiles.
 
 =head1 METHODS
 
