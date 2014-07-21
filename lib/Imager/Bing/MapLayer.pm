@@ -3,17 +3,19 @@ package Imager::Bing::MapLayer;
 use v5.10.1;
 
 use Moose;
+with 'Imager::Bing::MapLayer::Role::TileClass';
+with 'Imager::Bing::MapLayer::Role::FileHandling';
+with 'Imager::Bing::MapLayer::Role::Centroid';
+with 'Imager::Bing::MapLayer::Role::Misc';
 
 use Carp qw/ confess /;
 use Class::MOP::Method;
 use Const::Fast;
-use Cwd;
 use Moose::Util::TypeConstraints;
 use MooseX::StrictConstructor;
 
 use Imager::Bing::MapLayer::Utils qw/
     $MIN_ZOOM_LEVEL $MAX_ZOOM_LEVEL
-    _tile_class_type
     /;
 
 use Imager::Bing::MapLayer::Level;
@@ -24,7 +26,7 @@ Imager::Bing::MapLayer - create a map layer for Bing Maps
 
 =cut
 
-use version 0.77; our $VERSION = version->declare('v0.1.4');
+use version 0.77; our $VERSION = version->declare('v0.1.5');
 
 =head1 SYNOPSIS
 
@@ -75,25 +77,6 @@ tile files.
 
 =head1 ATTRIBUTES
 
-=cut
-
-# We want to center our conversions of lat/lon to London.
-
-const my $LONDON_LATITUDE  => 51.5171;
-const my $LONDON_LONGITUDE => 0.1062;
-
-=head2 C<base_dir>
-
-The base directory to save tile files in.
-
-=cut
-
-has 'base_dir' => (
-    is  => 'ro',
-    isa => subtype( as 'Str', where { -d $_ }, ),
-    default => sub { return getcwd; },
-);
-
 =head2 C<in_memory>
 
 The timeout for how many seconds a tile is kept in memory.
@@ -101,39 +84,17 @@ The timeout for how many seconds a tile is kept in memory.
 When a tile is timed out, it is saved to disk after each L<Imager> drawing
 operation, and reloaded if it is later needed.
 
-=cut
-
-has 'in_memory' => (
-    is  => 'ro',
-    isa => subtype( as 'Int', where { ( $_ >= 0 ) }, ),
-    default => sub { return 0; },
-);
-
 =head2 C<centroid_latitude>
-
-This is the default latitude for translating points to pixels.
-Generally you don't need to worry about this.
-
-=cut
-
-has 'centroid_latitude' => (
-    is      => 'ro',
-    isa     => 'Num',
-    default => sub { return $LONDON_LATITUDE },
-);
 
 =head2 C<centroid_longitude>
 
-This is the default longitude for translating points to pixels.
-Generally you don't need to worry about this.
+This is the centroid latitude and longitude for translating
+points to pixels.  It defaults to a point in London.
 
-=cut
-
-has 'centroid_longitude' => (
-    is      => 'ro',
-    isa     => 'Num',
-    default => sub { return $LONDON_LONGITUDE },
-);
+You can probably get away with ignoring this, but if you are
+generating maps for different regions of the world, then you may
+consider changing this, or even maininging different map sets with
+different centroids.
 
 =head2 C<overwrite>
 
@@ -143,51 +104,47 @@ edited.
 Be wary of editing existing tiles, since antialiased lines and opaque
 fills will darken existing points rather than drawing over them.
 
-=cut
-
-has 'overwrite' => (
-    is      => 'ro',
-    isa     => 'Bool',
-    default => sub { return 1; },
-);
-
 =head2 C<autosave>
 
 When true (default), tiles will be automatically saved.
 
 Alternatively, you can use the L</save> method.
 
-=cut
-
-has 'autosave' => (
-    is      => 'ro',
-    isa     => 'Bool',
-    default => sub { return 1; },
-);
-
 =head2 C<combine>
 
 The tile combination method. It defaults to C<darken>.
-
-=cut
-
-has 'combine' => (
-    is      => 'ro',
-    isa     => 'Str',
-    default => sub { return 'darken'; },
-);
 
 =head2 C<tile_class>
 
 The base class used for tiles.
 
-=cut
+This can be used to subclass the tiles, for instance, to save tiles
+with a different filename to use with something other than Bing maps,
+e.g. Google Maps.
 
-has 'tile_class' => (
+You might use something like:
+
+  package MyTile;
+
+  use Moose;
+  extends 'Imager::Bing::MapLayer::Tile';
+
+  use Path::Class;
+
+  has 'filename' => (
     is      => 'ro',
-    isa     => _tile_class_type(),
-    default => sub { 'Imager::Bing::MapLayer::Tile' },
-);
+    isa     => 'Str',
+    lazy    => 1,
+    default => sub {
+        my ($self) = @_;
+	my $file = file($self->base_dir, $self->level,
+			join(',', @{ $self->tile_coords }) . '.png');
+        return $file->stringify;
+    },
+  );
+
+
+=cut
 
 =head1 METHODS
 
@@ -229,6 +186,7 @@ has 'levels' => (
 
         return \@levels;
     },
+    init_arg => undef,
 );
 
 =head2 C<min_level>

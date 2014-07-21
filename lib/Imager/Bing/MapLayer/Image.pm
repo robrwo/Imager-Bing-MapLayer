@@ -7,20 +7,17 @@ use MooseX::StrictConstructor;
 
 use Moose::Util::TypeConstraints;
 
-use Carp qw/ carp confess /;
 use Class::MOP::Method;
 use Const::Fast;
-use Cwd;
 use Imager;
 use Imager::Color;
 use Imager::Fill;
 use Imager::Fountain;
 use List::Util 1.30 qw/ min pairmap /;
-use Path::Class qw/ file /;
 
 use namespace::autoclean;
 
-use version 0.77; our $VERSION = version->declare('v0.1.4');
+use version 0.77; our $VERSION = version->declare('v0.1.5');
 
 =head1 NAME
 
@@ -52,8 +49,8 @@ The coordinates of the top-left point on the image.
 =cut
 
 has 'pixel_origin' => (
-    is  => 'ro',
-    isa => 'ArrayRef',
+    is		=> 'ro',
+    isa		=> 'ArrayRef',
 );
 
 =head2 C<width>
@@ -80,8 +77,6 @@ has 'height' => (
     required => 1,
 );
 
-=head1 METHODS
-
 =head2 C<left>
 
 The left-most point of the C<x> axis of the image.  This corresponds to
@@ -98,6 +93,7 @@ has 'left' => (
         return $origin->[0];
     },
     lazy => 1,
+    init_arg	=> undef,
 );
 
 =head2 C<top>
@@ -116,6 +112,7 @@ has 'top' => (
         return $origin->[1];
     },
     lazy => 1,
+    init_arg	=> undef,
 );
 
 =head2 C<right>
@@ -132,6 +129,7 @@ has 'right' => (
         return $self->left + $self->width - 1;
     },
     lazy => 1,
+    init_arg	=> undef,
 );
 
 =head2 C<bottom>
@@ -148,6 +146,7 @@ has 'bottom' => (
         return $self->top + $self->height - 1;
     },
     lazy => 1,
+    init_arg	=> undef,
 );
 
 =head2 C<image>
@@ -179,7 +178,12 @@ has 'image' => (
 
         return $image;
     },
+    init_arg => undef,
 );
+
+=head1 METHODS
+
+=cut
 
 sub _translate_x {
     my ( $self, $x ) = @_;
@@ -529,7 +533,7 @@ sub radial_circle {
             src     => $circle,
             tx      => $center_x - $radius,
             ty      => $center_y - $radius,
-            combine => 'normal',              # change this?
+            combine => 'normal',              # TODO change this?
         );
     }
 }

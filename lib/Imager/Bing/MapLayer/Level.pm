@@ -3,11 +3,14 @@ package Imager::Bing::MapLayer::Level;
 use v5.10.1;
 
 use Moose;
+with 'Imager::Bing::MapLayer::Role::TileClass';
+with 'Imager::Bing::MapLayer::Role::FileHandling';
+with 'Imager::Bing::MapLayer::Role::Centroid';
+with 'Imager::Bing::MapLayer::Role::Misc';
 
 use Carp qw/ confess /;
 use Class::MOP::Method;
 use Const::Fast;
-use Cwd;
 use Imager;
 use List::Util qw/ min max /;
 use Moose::Util::TypeConstraints;
@@ -17,13 +20,13 @@ use POSIX::2008 qw/ round /;
 use Imager::Bing::MapLayer::Utils qw/
     $MIN_ZOOM_LEVEL $MAX_ZOOM_LEVEL $TILE_WIDTH $TILE_HEIGHT
     width_at_level bounding_box pixel_to_tile_coords tile_coords_to_quad_key
-    optimize_points get_ground_resolution _tile_class_type
+    optimize_points get_ground_resolution
     /;
 
 use Imager::Bing::MapLayer::Image;
 use Imager::Bing::MapLayer::Tile;
 
-use version 0.77; our $VERSION = version->declare('v0.1.4');
+use version 0.77; our $VERSION = version->declare('v0.1.5');
 
 =head1 NAME
 
@@ -63,44 +66,6 @@ has 'level' => (
     ),
 );
 
-=head2 C<base_dir>
-
-The base directory to save tile files in.
-
-=cut
-
-has 'base_dir' => (
-    is  => 'ro',
-    isa => subtype( as 'Str', where { -d $_ }, ),
-    default => sub { return getcwd; },
-);
-
-=head2 C<centroid_latitude>
-
-This is the default latitude for translating points to pixels.
-Generally you don't need to worry about this.
-
-=cut
-
-has 'centroid_latitude' => (
-    is      => 'ro',
-    isa     => 'Num',
-    default => sub { 0; },
-);
-
-=head2 C<centroid_longitude>
-
-This is the default longitude for translating points to pixels.
-Generally you don't need to worry about this.
-
-=cut
-
-has 'centroid_longitude' => (
-    is      => 'ro',
-    isa     => 'Num',
-    default => sub { 0; },
-);
-
 =head2 C<tiles>
 
 A hash reference of C<Imager::Bing::MapLayer::Tile> objects.
@@ -110,9 +75,10 @@ The keys are tile coordinates of the form C<$tile_x . $; . $tile_y>.
 =cut
 
 has 'tiles' => (
-    is      => 'ro',
-    isa     => 'HashRef',
-    default => sub { return {} },
+    is       => 'ro',
+    isa      => 'HashRef',
+    default  => sub { return {} },
+    init_arg => undef,
 );
 
 =head2 C<timeouts>
@@ -135,75 +101,6 @@ has 'last_cleanup_time' => (
     is      => 'rw',
     isa     => 'Int',
     default => sub { return time; },
-);
-
-=head2 C<overwrite>
-
-When true (default), existing tiles will be overwritten rather than
-edited.
-
-Be wary of editing existing tiles, since antialiased lines and opaque
-fills will darken existing points rather than drawing over them.
-
-=cut
-
-has 'overwrite' => (
-    is      => 'ro',
-    isa     => 'Bool',
-    default => sub { return 1; },
-);
-
-=head2 C<in_memory>
-
-The timeout for how many seconds a tile is kept in memory.
-
-When a tile is timed out, it is saved to disk after each L<Imager> drawing
-operation, and reloaded if it is later needed.
-
-=cut
-
-has 'in_memory' => (
-    is  => 'ro',
-    isa => subtype( as 'Int', where { ( $_ >= 0 ) }, ),
-    default => sub { return 0; },
-);
-
-=head2 C<autosave>
-
-When true (default), tiles will be automatically saved.
-
-Alternatively, you can use the L</save> method.
-
-=cut
-
-has 'autosave' => (
-    is      => 'ro',
-    isa     => 'Bool',
-    default => sub { return 1; },
-);
-
-=head2 C<combine>
-
-The tile combination method. It defaults to C<darken>.
-
-=cut
-
-has 'combine' => (
-    is      => 'ro',
-    isa     => 'Str',
-    default => sub { return 'darken'; },
-);
-
-=head2 C<tile_class>
-
-The base class used for tiles.
-
-=cut
-
-has 'tile_class' => (
-    is      => 'ro',
-    isa     => _tile_class_type(),
-    default => sub { 'Imager::Bing::MapLayer::Tile' },
 );
 
 =head1 METHODS

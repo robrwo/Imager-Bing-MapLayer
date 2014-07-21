@@ -1,15 +1,15 @@
 package Imager::Bing::MapLayer::Tile;
 
 use Moose;
-use MooseX::StrictConstructor;
+with 'Imager::Bing::MapLayer::Role::FileHandling';
 
+use MooseX::StrictConstructor;
 use Moose::Util::TypeConstraints;
 
 extends 'Imager::Bing::MapLayer::Image';
 
 use Carp qw/ carp confess /;
 use Class::MOP::Method;
-use Cwd;
 use Imager;
 use List::Util 1.30 qw/ pairmap /;
 use Path::Class qw/ file /;
@@ -22,7 +22,7 @@ use Imager::Bing::MapLayer::Utils qw/
     tile_coords_to_quad_key quad_key_to_tile_coords
     /;
 
-use version 0.77; our $VERSION = version->declare('v0.1.4');
+use version 0.77; our $VERSION = version->declare('v0.1.5');
 
 =head1 SYNOPSIS
 
@@ -49,58 +49,12 @@ has 'quad_key' => (
     required => 1,
 );
 
-=head2 C<base_dir>
-
-The base directory that tiles are saved in.
-
-=cut
-
-has 'base_dir' => (
-    is  => 'ro',
-    isa => subtype( as 'Str', where { -d $_ }, ),
-    default => sub { return getcwd; },
-);
-
-=head2 C<overwrite>
-
-If true (default), overwrite existing tile files.
-
-Note that re-running a process to generate a tole on an existing file
-is not an idemportent operation: opaque overlays and anti-aliasing
-will darken a region instead of recreating a set image.
-
-=cut
-
-has 'overwrite' => (
-    is      => 'ro',
-    isa     => 'Bool',
-    default => sub { return 1; },
-);
-
-=head2 C<autosave>
-
-If true (default), automatically save the tiles when the object is
-destroyed.
-
-=cut
-
-has 'autosave' => (
-    is      => 'ro',
-    isa     => 'Bool',
-    default => sub { return 1; },
-);
-
-=head1 METHODS
 
 =head2 C<level>
 
 The zoom level for this tile.  It is determined by the L</quad_key>.
 
 =cut
-
-# Yes, some of the methods below are written as attributes rather.
-# But as attributes, the values are cached.  Don't use them as an
-# attribute!
 
 has 'level' => (
     is      => 'ro',
@@ -110,6 +64,7 @@ has 'level' => (
         return length( $self->quad_key );
     },
     lazy => 1,
+    init_arg => undef,
 );
 
 =head2 C<tile_coords>
@@ -127,6 +82,7 @@ has 'tile_coords' => (
         return [ ( quad_key_to_tile_coords( $self->quad_key ) )[ 0, 1 ] ],;
     },
     lazy => 1,
+    init_arg => undef,
 );
 
 =head2 C<pixel_origin>
@@ -145,6 +101,7 @@ has 'pixel_origin' => (
         return [ tile_coords_to_pixel_origin( @{$tile_coords} ) ],;
     },
     lazy => 1,
+    init_arg => undef,
 );
 
 =head2 C<width>
@@ -155,9 +112,9 @@ The width of the tile.
 
 has 'width' => (
     is  => 'ro',
-    isa => subtype( as 'Int', where { $_ == $TILE_WIDTH }, ),
     default => sub { return $TILE_WIDTH },
     lazy    => 1,
+    init_arg => undef,
 );
 
 =head2 C<height>
@@ -168,9 +125,9 @@ The height of the tile.
 
 has 'height' => (
     is  => 'ro',
-    isa => subtype( as 'Int', where { $_ == $TILE_HEIGHT }, ),
     default => sub { return $TILE_HEIGHT },
     lazy    => 1,
+    init_arg => undef,
 );
 
 =head2 C<image>
@@ -214,6 +171,7 @@ has 'image' => (
 
         return $image;
     },
+    init_arg => undef,
 );
 
 =head2 C<filename>
@@ -230,7 +188,10 @@ has 'filename' => (
         my ($self) = @_;
         return file( $self->base_dir, $self->quad_key . '.png' )->stringify;
     },
+    init_arg => undef,
 );
+
+=head1 METHODS
 
 =head2 C<latlon_to_pixel>
 

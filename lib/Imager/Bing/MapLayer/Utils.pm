@@ -2,8 +2,6 @@ package Imager::Bing::MapLayer::Utils;
 
 use v5.10;
 
-use feature qw/ state /;
-
 use strict;
 use warnings;
 
@@ -19,18 +17,15 @@ our @EXPORT_OK = (
         tile_coords_to_quad_key quad_key_to_tile_coords
         bounding_box optimize_points
         get_ground_resolution get_map_scale
-        _tile_class_type
         /
 );
 
 use Carp qw/ confess /;
 use Const::Fast;
 use List::MoreUtils qw/ minmax /;
-use Module::Load qw/ load /;
 use POSIX::2008 qw/ round /;
-use Type::Tiny;
 
-use version 0.77; our $VERSION = version->declare('v0.1.4');
+use version 0.77; our $VERSION = version->declare('v0.1.5');
 
 =head1 NAME
 
@@ -362,21 +357,6 @@ sub optimize_points {
     }
 
     return \@list;
-}
-
-sub _tile_class_type {
-    state $type = Type::Tiny->new(
-        name       => 'TileClass',
-        constraint => sub {
-            my $class = $_;
-            load $class;
-            $class->isa('Imager::Bing::MapLayer::Tile');
-        },
-        message    => sub {
-            "$_ must be a Imager::Bing::MapLayer::Tile";
-        },
-    );
-    return $type;
 }
 
 =head1 SEE ALSO
