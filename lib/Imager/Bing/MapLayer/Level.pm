@@ -5,6 +5,7 @@ use v5.10.1;
 use Moose;
 with 'Imager::Bing::MapLayer::Role::TileClass';
 with 'Imager::Bing::MapLayer::Role::FileHandling';
+with 'Imager::Bing::MapLayer::Role::Centroid';
 
 use Carp qw/ confess /;
 use Class::MOP::Method;
@@ -66,29 +67,15 @@ has 'level' => (
 
 =head2 C<centroid_latitude>
 
-This is the default latitude for translating points to pixels.
-Generally you don't need to worry about this.
-
-=cut
-
-has 'centroid_latitude' => (
-    is      => 'ro',
-    isa     => 'Num',
-    default => sub { 0; },
-);
-
 =head2 C<centroid_longitude>
 
-This is the default longitude for translating points to pixels.
-Generally you don't need to worry about this.
+This is the centroid latitude and longitude for translating
+points to pixels.  It defaults to a point in London.
 
-=cut
-
-has 'centroid_longitude' => (
-    is      => 'ro',
-    isa     => 'Num',
-    default => sub { 0; },
-);
+You can probably get away with ignoring this, but if you are
+generating maps for different regions of the world, then you may
+consider changing this, or even maininging different map sets with
+different centroids.
 
 =head2 C<tiles>
 
@@ -99,9 +86,9 @@ The keys are tile coordinates of the form C<$tile_x . $; . $tile_y>.
 =cut
 
 has 'tiles' => (
-    is      => 'ro',
-    isa     => 'HashRef',
-    default => sub { return {} },
+    is       => 'ro',
+    isa      => 'HashRef',
+    default  => sub { return {} },
     init_arg => undef,
 );
 

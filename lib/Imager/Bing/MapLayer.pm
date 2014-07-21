@@ -5,6 +5,7 @@ use v5.10.1;
 use Moose;
 with 'Imager::Bing::MapLayer::Role::TileClass';
 with 'Imager::Bing::MapLayer::Role::FileHandling';
+with 'Imager::Bing::MapLayer::Role::Centroid';
 
 use Carp qw/ confess /;
 use Class::MOP::Method;
@@ -75,13 +76,6 @@ tile files.
 
 =head1 ATTRIBUTES
 
-=cut
-
-# We want to center our conversions of lat/lon to London.
-
-const my $LONDON_LATITUDE  => 51.5171;
-const my $LONDON_LONGITUDE => 0.1062;
-
 =head2 C<in_memory>
 
 The timeout for how many seconds a tile is kept in memory.
@@ -102,26 +96,10 @@ has 'in_memory' => (
 This is the default latitude for translating points to pixels.
 Generally you don't need to worry about this.
 
-=cut
-
-has 'centroid_latitude' => (
-    is      => 'ro',
-    isa     => 'Num',
-    default => sub { return $LONDON_LATITUDE },
-);
-
 =head2 C<centroid_longitude>
 
 This is the default longitude for translating points to pixels.
 Generally you don't need to worry about this.
-
-=cut
-
-has 'centroid_longitude' => (
-    is      => 'ro',
-    isa     => 'Num',
-    default => sub { return $LONDON_LONGITUDE },
-);
 
 =head2 C<overwrite>
 
