@@ -6,6 +6,7 @@ use Moose;
 with 'Imager::Bing::MapLayer::Role::TileClass';
 with 'Imager::Bing::MapLayer::Role::FileHandling';
 with 'Imager::Bing::MapLayer::Role::Centroid';
+with 'Imager::Bing::MapLayer::Role::Misc';
 
 use Carp qw/ confess /;
 use Class::MOP::Method;
@@ -65,18 +66,6 @@ has 'level' => (
     ),
 );
 
-=head2 C<centroid_latitude>
-
-=head2 C<centroid_longitude>
-
-This is the centroid latitude and longitude for translating
-points to pixels.  It defaults to a point in London.
-
-You can probably get away with ignoring this, but if you are
-generating maps for different regions of the world, then you may
-consider changing this, or even maininging different map sets with
-different centroids.
-
 =head2 C<tiles>
 
 A hash reference of C<Imager::Bing::MapLayer::Tile> objects.
@@ -113,37 +102,6 @@ has 'last_cleanup_time' => (
     isa     => 'Int',
     default => sub { return time; },
 );
-
-=head2 C<in_memory>
-
-The timeout for how many seconds a tile is kept in memory.
-
-When a tile is timed out, it is saved to disk after each L<Imager> drawing
-operation, and reloaded if it is later needed.
-
-=cut
-
-has 'in_memory' => (
-    is  => 'ro',
-    isa => subtype( as 'Int', where { ( $_ >= 0 ) }, ),
-    default => sub { return 0; },
-);
-
-=head2 C<combine>
-
-The tile combination method. It defaults to C<darken>.
-
-=cut
-
-has 'combine' => (
-    is      => 'ro',
-    isa     => 'Str',
-    default => sub { return 'darken'; },
-);
-
-=head2 C<tile_class>
-
-The base class used for tiles.
 
 =head1 METHODS
 
