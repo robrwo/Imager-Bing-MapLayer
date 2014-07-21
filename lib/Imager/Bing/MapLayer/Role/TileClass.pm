@@ -19,7 +19,7 @@ use version 0.77; our $VERSION = version->declare('v0.1.5');
 
 =head1 DESCRIPTION
 
-This is an internal role.
+This role is for internal use by L<Imager::Bing::MapLayer>.
 
 =head1 ATTRIBUTES
 
@@ -27,28 +27,24 @@ This is an internal role.
 
 The base class used for tiles.
 
-See L<Imager::Bing::MapLayer> for an explanation of how to subclass
-tiles.
-
 =cut
 
 state $Type = Type::Tiny->new(
     name       => 'TileClass',
     constraint => sub {
-	my $class = $_;
-	load $class;
-	$class->isa('Imager::Bing::MapLayer::Tile');
+        my $class = $_;
+        load $class;
+        $class->isa('Imager::Bing::MapLayer::Tile');
     },
-    message    => sub {
-	"$_ must be a Imager::Bing::MapLayer::Tile";
+    message => sub {
+        "$_ must be a Imager::Bing::MapLayer::Tile";
     },
-    );
+);
 
 has 'tile_class' => (
     is      => 'ro',
     isa     => $Type,
-    default => sub { 'Imager::Bing::MapLayer::Tile' },
+    default => sub {'Imager::Bing::MapLayer::Tile'},
 );
-
 
 1;
