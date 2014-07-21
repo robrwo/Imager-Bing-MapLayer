@@ -221,6 +221,7 @@ has 'levels' => (
 
         return \@levels;
     },
+    init_arg => undef,
 );
 
 =head2 C<min_level>
