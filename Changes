@@ -1,6 +1,6 @@
 Revision history for Imager-Bing-MapLayer
 
-v0.1.5
+v0.1.5  2014-07-21
 
   - Added test for tile subclassing.
 
