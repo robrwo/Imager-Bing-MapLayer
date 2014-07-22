@@ -533,7 +533,7 @@ sub radial_circle {
             src     => $circle,
             tx      => $center_x - $radius,
             ty      => $center_y - $radius,
-            combine => 'normal',              # change this?
+            combine => 'normal',              # TODO change this?
         );
     }
 }

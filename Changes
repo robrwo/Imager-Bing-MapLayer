@@ -1,12 +1,12 @@
 Revision history for Imager-Bing-MapLayer
 
-v0.1.5
+v0.1.5  2014-07-21
 
   - Added test for tile subclassing.
 
   - Added example of subclassing to the POD.
 
-  - Internal code refactoring.
+  - Internal code refactoring and code tweaks.
 
   - Minor POD tweaks/typo fixes.
 
