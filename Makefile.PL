@@ -6,7 +6,7 @@ use inc::Module::Install;
 name     'Imager-Bing-MapLayer';
 version_from 'lib/Imager/Bing/MapLayer.pm';
 author   q{Robert Rothenberg <rrwo@cpan.org>};
-license  'artistic2';
+license  'artistic_2';
 
 perl_version 5.010;
 
