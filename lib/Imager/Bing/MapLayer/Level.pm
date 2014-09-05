@@ -50,6 +50,8 @@ Imager::Bing::MapLayer::Level - zoom levels for Bing Maps
 
 =head1 DESCRIPTION
 
+This module supports drawing on specific zoom levels.
+
 =head1 ATTRIBUTES
 
 =head2 C<level>
