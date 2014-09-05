@@ -707,6 +707,8 @@ sub filter {
 
 =head2 C<colourise>
 
+=head2 C<colorize>
+
     $level->colourise();
 
 Runs the C<colourise> method on tiles.
@@ -747,6 +749,11 @@ sub colourise {
         }
     }
 
+}
+
+sub colorise {
+    my ( $self, %args ) = @_;
+    $self->colourise(%args);
 }
 
 =head2 C<save>
