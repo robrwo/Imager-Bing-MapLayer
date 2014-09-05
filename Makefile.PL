@@ -41,7 +41,7 @@ requires(
     'Cwd'                          => 0,
     'Exporter::Lite'               => 0,
     'Imager'                       => 0,
-    'List::MoreUtils'              => 0,
+    'List::MoreUtils'              => 0.07,
     'List::Util'                   => 1.30,
     'Path::Class'                  => 0,
     'POSIX::2008'                  => 0,
