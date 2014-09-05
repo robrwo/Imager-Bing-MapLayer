@@ -76,7 +76,7 @@ The keys are tile coordinates of the form C<$tile_x . $; . $tile_y>.
 
 has 'tiles' => (
     is       => 'ro',
-    isa      => 'HashRef',
+    isa      => 'HashRef[Imager::Bing::MapLayer::Tile]',
     default  => sub { return {} },
     init_arg => undef,
 );
@@ -89,7 +89,7 @@ has 'tiles' => (
 
 has 'timeouts' => (
     is      => 'ro',
-    isa     => 'HashRef',
+    isa     => 'HashRef[Int]',
     default => sub { return {} },
 );
 
