@@ -23,7 +23,7 @@ has 'filename' => (
 package main;
 
 use Test::Most;
-use Test::Warnings;
+use if $ENV{AUTHOR_TESTING} || $ENV{RELEASE_TESTING}, 'Test::Warnings';
 
 use aliased
     'Imager::Bing::MapLayer::Utils' => 'Utils',

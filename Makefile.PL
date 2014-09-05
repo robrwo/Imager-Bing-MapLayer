@@ -2,29 +2,31 @@ use strict;
 use warnings FATAL => 'all';
 use inc::Module::Install;
 
-name     'Imager-Bing-MapLayer';
+name 'Imager-Bing-MapLayer';
 version_from 'lib/Imager/Bing/MapLayer.pm';
-author   q{Robert Rothenberg <rrwo@cpan.org>};
-license  'artistic_2';
+author q{Robert Rothenberg <rrwo@cpan.org>};
+license 'artistic_2';
 
 perl_version 5.010001;
 
 tests_recursive('t');
+
 # tests_recursive('xt');
 
-resources (
-   homepage   => 'http://rrwo.tumblr.com',
-   license    => 'artistic2',
-   repository => 'git://github.com/robrwo/Imager-Bing-MapLayer.git',
-   bugtracker => 'https://github.com/robrwo/Imager-Bing-MapLayer/issues',
+resources(
+    homepage   => 'http://rrwo.tumblr.com',
+    license    => 'artistic2',
+    repository => 'git://github.com/robrwo/Imager-Bing-MapLayer.git',
+    bugtracker => 'https://github.com/robrwo/Imager-Bing-MapLayer/issues',
 );
 
-configure_requires ();
+configure_requires();
 
-build_requires (
+build_requires(
     'aliased'          => 0,
     'File::Find::Rule' => 0,
     'File::Temp'       => 0,
+    'if'               => 0,
     'Image::Size'      => 0,
     'Test::Exception'  => 0,
     'Test::More'       => 0,
@@ -32,7 +34,7 @@ build_requires (
     'Test::Warnings'   => 0,
 );
 
-requires (
+requires(
     'Carp'                         => 0,
     'Class::MOP::Method'           => 0,
     'Const::Fast'                  => 0,
@@ -52,9 +54,7 @@ requires (
     'version'                      => 0.77,
 );
 
-recommends (
-    'Type::Tiny::XS'               => 0,
-);
+recommends( 'Type::Tiny::XS' => 0, );
 
 install_as_cpan;
 auto_install;
