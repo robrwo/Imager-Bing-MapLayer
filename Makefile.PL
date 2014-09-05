@@ -10,8 +10,7 @@ license 'artistic_2';
 perl_version 5.010001;
 
 tests_recursive('t');
-
-# tests_recursive('xt');
+tests_recursive('xt') if $ENV{AUTHOR_TESTING} || $ENV{RELEASE_TESTING};
 
 resources(
     homepage   => 'http://rrwo.tumblr.com',
