@@ -85,7 +85,7 @@ has 'tiles' => (
 
 =cut
 
-# TODO - the last-modified value should be saved with each tile
+# TODO - the last-modified value should be saved with each tile?
 
 has 'timeouts' => (
     is      => 'ro',
