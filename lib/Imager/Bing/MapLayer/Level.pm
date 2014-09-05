@@ -142,6 +142,8 @@ sub latlon_to_pixel {
         @latlon );
 }
 
+=begin :internal
+
 =head2 C<_translate_points>
 
 This is a utility method for translating C<points> parameters from
@@ -655,6 +657,8 @@ __PACKAGE__->_make_imager_wrapper_method(
         ],
     }
 );
+
+=end :internal
 
 # TODO/FIXME - generic method with callbacks to apply a function to a
 # all tiles on a level?
