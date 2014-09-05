@@ -1,4 +1,3 @@
-use v5.10.1;
 use strict;
 use warnings FATAL => 'all';
 use inc::Module::Install;
@@ -8,7 +7,7 @@ version_from 'lib/Imager/Bing/MapLayer.pm';
 author   q{Robert Rothenberg <rrwo@cpan.org>};
 license  'artistic_2';
 
-perl_version 5.010;
+perl_version 5.010001;
 
 tests_recursive('t');
 # tests_recursive('xt');
