@@ -121,7 +121,7 @@ you get C<malloc> errors when rendering tiles.
 has '_max_buffer_breadth' => (
     is      => 'ro',
     isa     => 'Int',
-    default => 4000,
+    default => 8000,
 );
 
 =head1 METHODS
@@ -480,16 +480,13 @@ sub _make_imager_wrapper_method {
             # tile, for complex polylines and polygons like geographic
             # boundaries.
 
-            # TODO - get* methods should be handled differently.
+            # But we cannot allocate too-large a temporary image, so
+            # we still need to draw them in pieces.
 
-            # Note: we cannot catch malloc errors if the image is too
-            # large. Perl will just exit. See L<perldiag> for more
-            # information.
+            # TODO - get* methods should be handled differently.
 
             my ( $this_left, $this_top, $this_right, $this_bottom )
                 = ( $left, $top, $right, $bottom );
-
-            # _max_buffer_breadth
 
             while ( $this_left <= $this_right ) {
 
@@ -503,6 +500,10 @@ sub _make_imager_wrapper_method {
                             $self->_max_buffer_breadth
                         )
                     );
+
+                    # Note: we cannot catch malloc errors if the image
+                    # is too large. Perl will just exit. See
+                    # L<perldiag> for more information.
 
                     my $image = Imager::Bing::MapLayer::Image->new(
                         pixel_origin => [ $this_left, $this_top ],
