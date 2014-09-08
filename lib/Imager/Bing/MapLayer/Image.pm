@@ -588,7 +588,7 @@ sub colourise {
     return 1;
 }
 
-sub colorise {
+sub colorize {
     my ( $self, %args ) = @_;
     $self->colourise(%args);
 }
