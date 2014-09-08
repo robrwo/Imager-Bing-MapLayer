@@ -464,7 +464,9 @@ sub _make_imager_wrapper_method {
 
             # TODO - get* methods should be handled differently.
 
-            # Note: Try::Tiny does not catch malloc errors
+            # Note: we cannot catch malloc errors if the image is too
+            # large. Perl will just exit. See L<perldiag> for more
+            # information.
 
             my $image = Imager::Bing::MapLayer::Image->new(
                 pixel_origin => [ $left, $top ],
