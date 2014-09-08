@@ -26,6 +26,7 @@ META.yml
 README
 t/layer.t
 t/level.t
+t/malloc.t
 t/tile.t
 t/tile_subclass.t
 t/utils.t
