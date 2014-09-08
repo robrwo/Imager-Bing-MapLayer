@@ -17,7 +17,7 @@ use List::Util 1.30 qw/ min pairmap /;
 
 use namespace::autoclean;
 
-use version 0.77; our $VERSION = version->declare('v0.1.5');
+use version 0.77; our $VERSION = version->declare('v0.1.6');
 
 =head1 NAME
 
