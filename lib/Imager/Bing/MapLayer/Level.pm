@@ -580,41 +580,46 @@ sub _make_imager_wrapper_method {
                                         left  => $crop_left,
                                         top   => $crop_top,
                                         width => 1 + min(
-                                            $right - $crop_left,
+                                            $this_right - $crop_left,
                                             $tile->right - $crop_left
                                         ),
                                         height => 1 + min(
-                                            $bottom - $crop_top,
+                                            $this_bottom - $crop_top,
                                             $tile->bottom - $crop_top
                                         ),
                                     );
 
-                                    $tile->compose(
-                                        src     => $crop,
-                                        left    => $crop_left,
-                                        top     => $crop_top,
-                                        width   => $crop->getwidth,
-                                        height  => $crop->getheight,
-                                        combine => $self->combine,
-                                    );
+                                    if ($crop) {
 
-                                    $crop = undef;  # force garbage collection
+                                        $tile->compose(
+                                            src     => $crop,
+                                            left    => $crop_left,
+                                            top     => $crop_top,
+                                            width   => $crop->getwidth,
+                                            height  => $crop->getheight,
+                                            combine => $self->combine,
+                                        );
 
-                                    if ( $self->in_memory ) {
+                                        $crop = undef
+                                            ;    # force garbage collection
 
-                                        $timeouts->{$key}
-                                            = time() + $self->in_memory;
+                                        if ( $self->in_memory ) {
 
-                                        $self->_cleanup_tiles();
+                                            $timeouts->{$key}
+                                                = time() + $self->in_memory;
 
-                                    } else {
+                                            $self->_cleanup_tiles();
 
-                                        # See comments about regarding
-                                        # autosave consistency.
+                                        } else {
 
-                                        $tile->save;
+                                            # See comments about regarding
+                                            # autosave consistency.
 
-                                        $tiles->{$key} = undef;
+                                            $tile->save;
+
+                                            $tiles->{$key} = undef;
+
+                                        }
 
                                     }
 
