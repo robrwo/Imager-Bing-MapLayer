@@ -10,6 +10,9 @@ v0.1.5  2014-07-21
 
   - Minor POD tweaks/typo fixes.
 
+  - Added a workaround for malloc limitations when drawing images that
+    are too large.
+
 v0.1.4  2014-07-18
 
   - Added missing prereq for tests.
