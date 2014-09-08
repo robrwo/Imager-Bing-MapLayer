@@ -1,5 +1,14 @@
 Revision history for Imager-Bing-MapLayer
 
+  - Minor POD tweaks/typo fixes.
+
+  - Removed POD from internal modules.
+
+  - Added a workaround for malloc limitations when drawing images that
+    are too large.
+
+  - Added Cambridge (aka "US") spelling for method names.
+
 v0.1.5  2014-07-21
 
   - Added test for tile subclassing.

@@ -1,6 +1,6 @@
 package Imager::Bing::MapLayer::Role::TileClass;
 
-use v5.10;
+use v5.10.1;
 
 use feature qw/ state /;
 
@@ -21,12 +21,6 @@ use version 0.77; our $VERSION = version->declare('v0.1.5');
 
 This role is for internal use by L<Imager::Bing::MapLayer>.
 
-=head1 ATTRIBUTES
-
-=head2 C<tile_class>
-
-The base class used for tiles.
-
 =cut
 
 state $Type = Type::Tiny->new(
@@ -44,7 +38,13 @@ state $Type = Type::Tiny->new(
 has 'tile_class' => (
     is      => 'ro',
     isa     => $Type,
-    default => sub {'Imager::Bing::MapLayer::Tile'},
+    builder => '_build_tile_class',
 );
+
+sub _build_tile_class {
+    'Imager::Bing::MapLayer::Tile';
+}
+
+use namespace::autoclean;
 
 1;

@@ -50,6 +50,8 @@ Imager::Bing::MapLayer::Level - zoom levels for Bing Maps
 
 =head1 DESCRIPTION
 
+This module supports drawing on specific zoom levels.
+
 =head1 ATTRIBUTES
 
 =head2 C<level>
@@ -76,7 +78,7 @@ The keys are tile coordinates of the form C<$tile_x . $; . $tile_y>.
 
 has 'tiles' => (
     is       => 'ro',
-    isa      => 'HashRef',
+    isa      => 'HashRef[Imager::Bing::MapLayer::Tile]',
     default  => sub { return {} },
     init_arg => undef,
 );
@@ -85,11 +87,11 @@ has 'tiles' => (
 
 =cut
 
-# TODO - the last-modified value should be saved with each tile
+# TODO - the last-modified value should be saved with each tile?
 
 has 'timeouts' => (
     is      => 'ro',
-    isa     => 'HashRef',
+    isa     => 'HashRef[Int]',
     default => sub { return {} },
 );
 
@@ -101,6 +103,25 @@ has 'last_cleanup_time' => (
     is      => 'rw',
     isa     => 'Int',
     default => sub { return time; },
+);
+
+=begin :internal
+
+=head2 C<_max_buffer_breadth>
+
+The maximum width and height of the temporary L<Imager> image.
+
+Generally, you do not need to be concerned with this parameter, unless
+you get C<malloc> errors when rendering tiles.
+
+=end :internal
+
+=cut
+
+has '_max_buffer_breadth' => (
+    is      => 'ro',
+    isa     => 'Int',
+    default => 8000,
 );
 
 =head1 METHODS
@@ -141,6 +162,8 @@ sub latlon_to_pixel {
     return Imager::Bing::MapLayer::Utils::latlon_to_pixel( $self->level,
         @latlon );
 }
+
+=begin :internal
 
 =head2 C<_translate_points>
 
@@ -448,139 +471,179 @@ sub _make_imager_wrapper_method {
 
             my ( $left, $top, $right, $bottom ) = bounding_box(%imager_args);
 
+            my ( $width, $height )
+                = ( 1 + $right - $left, 1 + $bottom - $top );
+
             # We create a temporary image and draw on it. We then
             # compose the appropriate pieces of that image on each
             # tile.  This is faster than drawing the image on every
             # tile, for complex polylines and polygons like geographic
             # boundaries.
 
-            # TODO - for very large polygons, this will require images
-            # that are too large for higher zoom levels. We need to
-            # modify this to render images on multiple pseudo-tiles.
+            # But we cannot allocate too-large a temporary image, so
+            # we still need to draw them in pieces.
 
             # TODO - get* methods should be handled differently.
 
-            # Note: Try::Tiny does not catch malloc errors
+            my ( $this_left, $this_top, $this_right, $this_bottom )
+                = ( $left, $top, $right, $bottom );
 
-            my $image = Imager::Bing::MapLayer::Image->new(
-                pixel_origin => [ $left, $top ],
-                width        => 1 + $right - $left,
-                height       => 1 + $bottom - $top,
-            );
+            while ( $this_left <= $this_right ) {
 
-            unless ($image) {
+                while ( $this_top <= $this_bottom ) {
 
-                confess
-                    sprintf(
-                    "unable to create image for (%d , %d) (%d , %d) at level %d: %s",
-                    $left, $top, $right, $bottom, $self->level, $_ );
-
-            }
-
-            if ( my $method = $image->can( $opts->{name} ) ) {
-
-                my $result = $image->$method(%imager_args);
-
-                # Now get the tile boundaries
-
-                my ( $tile_left, $tile_top )
-                    = pixel_to_tile_coords( $left, $top );
-                my ( $tile_right, $tile_bottom )
-                    = pixel_to_tile_coords( $right, $bottom );
-
-                my $tiles    = $self->tiles;
-                my $timeouts = $self->timeouts;
-
-                for (
-                    my $tile_y = $tile_top;
-                    $tile_y <= $tile_bottom;
-                    $tile_y++
-                    )
-                {
-
-                    for (
-                        my $tile_x = $tile_left;
-                        $tile_x <= $tile_right;
-                        $tile_x++
+                    my ( $this_width, $this_height ) = (
+                        min(1 + $this_right - $this_left,
+                            $self->_max_buffer_breadth
+                        ),
+                        min(1 + $this_bottom - $this_top,
+                            $self->_max_buffer_breadth
                         )
-                    {
+                    );
 
-                        my $key
-                            = $self->_tile_coords_to_internal_key( $tile_x,
-                            $tile_y );
+                    # Note: we cannot catch malloc errors if the image
+                    # is too large. Perl will just exit. See
+                    # L<perldiag> for more information.
 
-                        unless ( defined $tiles->{$key} ) {
+                    my $image = Imager::Bing::MapLayer::Image->new(
+                        pixel_origin => [ $this_left, $this_top ],
+                        width        => $this_width,
+                        height       => $this_height,
+                    );
 
-                            my $overwrite
-                                = ( exists $tiles->{$key}
-                                    && $self->in_memory )
-                                ? 0
-                                : $self->overwrite;
+                    unless ($image) {
 
-                            $tiles->{$key}
-                                = $self->_load_tile( $tile_x, $tile_y,
-                                $overwrite );
-
-                            $timeouts->{$key} = time() + $self->in_memory;
-                        }
-
-                        if ( my $tile = $tiles->{$key} ) {
-
-                            my $crop_left = max( $left, $tile->left );
-                            my $crop_top  = max( $top,  $tile->top );
-
-                            my $crop = $image->crop(
-                                left  => $crop_left,
-                                top   => $crop_top,
-                                width => 1 + min(
-                                    $right - $crop_left,
-                                    $tile->right - $crop_left
-                                ),
-                                height => 1 + min(
-                                    $bottom - $crop_top,
-                                    $tile->bottom - $crop_top
-                                ),
-                            );
-
-                            $tile->compose(
-                                src     => $crop,
-                                left    => $crop_left,
-                                top     => $crop_top,
-                                width   => $crop->getwidth,
-                                height  => $crop->getheight,
-                                combine => $self->combine,
-                            );
-
-                            $crop = undef;    # force garbage collection
-
-                            if ( $self->in_memory ) {
-
-                                $timeouts->{$key} = time() + $self->in_memory;
-
-                                $self->_cleanup_tiles();
-
-                            } else {
-
-                                # See comments about regarding
-                                # autosave consistency.
-
-                                $tile->save;
-
-                                $tiles->{$key} = undef;
-
-                            }
-
-                        }
+                        confess
+                            sprintf(
+                            "unable to create image for (%d , %d) (%d , %d) at level %d: %s",
+                            $this_left, $this_top, $this_right, $this_bottom,
+                            $self->level, $_ );
 
                     }
+
+                    if ( my $method = $image->can( $opts->{name} ) ) {
+
+                        my $result = $image->$method(%imager_args);
+
+                        # Now get the tile boundaries
+
+                        my ( $tile_left, $tile_top )
+                            = pixel_to_tile_coords( $this_left, $this_top );
+                        my ( $tile_right, $tile_bottom )
+                            = pixel_to_tile_coords( $this_right,
+                            $this_bottom );
+
+                        my $tiles    = $self->tiles;
+                        my $timeouts = $self->timeouts;
+
+                        for (
+                            my $tile_y = $tile_top;
+                            $tile_y <= $tile_bottom;
+                            $tile_y++
+                            )
+                        {
+
+                            for (
+                                my $tile_x = $tile_left;
+                                $tile_x <= $tile_right;
+                                $tile_x++
+                                )
+                            {
+
+                                my $key
+                                    = $self->_tile_coords_to_internal_key(
+                                    $tile_x, $tile_y );
+
+                                unless ( defined $tiles->{$key} ) {
+
+                                    my $overwrite
+                                        = ( exists $tiles->{$key}
+                                            && $self->in_memory )
+                                        ? 0
+                                        : $self->overwrite;
+
+                                    $tiles->{$key}
+                                        = $self->_load_tile( $tile_x, $tile_y,
+                                        $overwrite );
+
+                                    $timeouts->{$key}
+                                        = time() + $self->in_memory;
+                                }
+
+                                if ( my $tile = $tiles->{$key} ) {
+
+                                    my $crop_left
+                                        = max( $this_left, $tile->left );
+                                    my $crop_top
+                                        = max( $this_top, $tile->top );
+
+                                    my $crop = $image->crop(
+                                        left  => $crop_left,
+                                        top   => $crop_top,
+                                        width => 1 + min(
+                                            $this_right - $crop_left,
+                                            $tile->right - $crop_left
+                                        ),
+                                        height => 1 + min(
+                                            $this_bottom - $crop_top,
+                                            $tile->bottom - $crop_top
+                                        ),
+                                    );
+
+                                    if ($crop) {
+
+                                        $tile->compose(
+                                            src     => $crop,
+                                            left    => $crop_left,
+                                            top     => $crop_top,
+                                            width   => $crop->getwidth,
+                                            height  => $crop->getheight,
+                                            combine => $self->combine,
+                                        );
+
+                                        $crop = undef
+                                            ;    # force garbage collection
+
+                                        if ( $self->in_memory ) {
+
+                                            $timeouts->{$key}
+                                                = time() + $self->in_memory;
+
+                                            $self->_cleanup_tiles();
+
+                                        } else {
+
+                                            # See comments about regarding
+                                            # autosave consistency.
+
+                                            $tile->save;
+
+                                            $tiles->{$key} = undef;
+
+                                        }
+
+                                    }
+
+                                }
+
+                            }
+                        }
+
+                        $image = undef;    # force garbage collection
+                    }
+
+                    else {
+
+                        confess sprintf( "invalid method name: %s",
+                            $opts->{name} );
+
+                    }
+
+                    $this_top += $self->_max_buffer_breadth;
+
                 }
 
-                $image = undef;    # force garbage collection
-
-            } else {
-
-                confess sprintf( "invalid method name: %s", $opts->{name} );
-
+                $this_left += $self->_max_buffer_breadth;
             }
 
         },
@@ -656,6 +719,8 @@ __PACKAGE__->_make_imager_wrapper_method(
     }
 );
 
+=end :internal
+
 # TODO/FIXME - generic method with callbacks to apply a function to a
 # all tiles on a level?
 
@@ -703,6 +768,8 @@ sub filter {
 
 =head2 C<colourise>
 
+=head2 C<colorize>
+
     $level->colourise();
 
 Runs the C<colourise> method on tiles.
@@ -743,6 +810,11 @@ sub colourise {
         }
     }
 
+}
+
+sub colorise {
+    my ( $self, %args ) = @_;
+    $self->colourise(%args);
 }
 
 =head2 C<save>
