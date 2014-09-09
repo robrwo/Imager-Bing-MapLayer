@@ -49,7 +49,6 @@ has 'quad_key' => (
     required => 1,
 );
 
-
 =head2 C<level>
 
 The zoom level for this tile.  It is determined by the L</quad_key>.
@@ -63,7 +62,7 @@ has 'level' => (
         my ($self) = @_;
         return length( $self->quad_key );
     },
-    lazy => 1,
+    lazy     => 1,
     init_arg => undef,
 );
 
@@ -81,7 +80,7 @@ has 'tile_coords' => (
         my ($self) = @_;
         return [ ( quad_key_to_tile_coords( $self->quad_key ) )[ 0, 1 ] ],;
     },
-    lazy => 1,
+    lazy     => 1,
     init_arg => undef,
 );
 
@@ -100,7 +99,7 @@ has 'pixel_origin' => (
         my $tile_coords = $self->tile_coords;
         return [ tile_coords_to_pixel_origin( @{$tile_coords} ) ],;
     },
-    lazy => 1,
+    lazy     => 1,
     init_arg => undef,
 );
 
@@ -111,9 +110,9 @@ The width of the tile.
 =cut
 
 has 'width' => (
-    is  => 'ro',
-    default => sub { return $TILE_WIDTH },
-    lazy    => 1,
+    is       => 'ro',
+    default  => $TILE_WIDTH,
+    lazy     => 1,
     init_arg => undef,
 );
 
@@ -124,9 +123,9 @@ The height of the tile.
 =cut
 
 has 'height' => (
-    is  => 'ro',
-    default => sub { return $TILE_HEIGHT },
-    lazy    => 1,
+    is       => 'ro',
+    default  => $TILE_HEIGHT,
+    lazy     => 1,
     init_arg => undef,
 );
 
@@ -151,7 +150,7 @@ has 'image' => (
 
         my $file = $self->filename;
 
-        if ( -e $file ) {
+        if ( -s $file ) {
 
             if ( $self->overwrite ) {
 
