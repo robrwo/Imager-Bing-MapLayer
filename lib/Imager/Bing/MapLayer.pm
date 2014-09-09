@@ -73,16 +73,34 @@ coordinates.
 The module will automatically map them to the appropriate points on
 tile files.
 
+It adds the following options to drawing methods:
+
+=over
+
+=item C<-min_level>
+
+The minimum zoom level to draw on.
+
+=item C<-max_level>
+
+The maximum zoom level to draw on.
+
+=back
+
 =for readme stop
 
 =head1 ATTRIBUTES
 
 =head2 C<in_memory>
 
-The timeout for how many seconds a tile is kept in memory.
+The timeout for how many seconds a tile is kept in memory. The default
+is C<0>.
 
 When a tile is timed out, it is saved to disk after each L<Imager> drawing
 operation, and reloaded if it is later needed.
+
+Setting this to a non-zero value keeps tiles in memory, but increases
+the memory requirements.
 
 =head2 C<centroid_latitude>
 
@@ -108,7 +126,19 @@ fills will darken existing points rather than drawing over them.
 
 When true (default), tiles will be automatically saved.
 
-Alternatively, you can use the L</save> method.
+Alternatively, you can use the L</save> method to manually save tiles.
+
+Note that any times in memory when a script is interrupted may be
+lost. An alternative to add something to trap interruptions:
+
+  local $SIG{INT} = sub {
+      state $int = 0;
+      unless ($int) {
+          $int=1;
+          $image->save();
+      }
+      exit 1;
+  };
 
 =head2 C<combine>
 
