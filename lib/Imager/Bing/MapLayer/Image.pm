@@ -179,9 +179,14 @@ has 'image' => (
         return $image;
     },
     init_arg => undef,
+    handles  => [qw/ errstr getwidth getheight /],
 );
 
 =head1 METHODS
+
+=head2 C<errstr>
+
+The L<Imager> error string.
 
 =cut
 
@@ -270,6 +275,8 @@ sub _translate_point_arguments {
     return %i_args;
 }
 
+=begin :internal
+
 =head2 C<_make_imager_wrapper_method>
 
 Rather than have a lot of cut-and-paste code for wrappers to L<Imager>
@@ -278,6 +285,8 @@ methods, we have a L<Moose> method for creating new methods.
 These methods translate the C<points>, C<x> and C<y> arguments for the
 level into coordinates on the tile, and then run the corresponding
 L<Imager> methods on the tile.
+
+=end :internal
 
 =cut
 
