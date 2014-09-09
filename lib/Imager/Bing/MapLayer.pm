@@ -419,6 +419,56 @@ sub save {
 
 =for readme continue
 
+=head1 VIEWING MAP LAYERS
+
+=head2 Bing Maps
+
+You can view tiles using the following web page, replacing the
+C<credentials> option with your Bing Maps Key:
+
+  <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+  <html xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml"
+        xml:lang="en" lang="en">
+    <head>
+      <title>Tiles Test</title>
+      <script src="http://ecn.dev.virtualearth.net/mapcontrol/mapcontrol.ashx?v=7.0&mkt=en-gb"></script>
+      <script>
+       //<![CDATA[
+       var map;
+       function init(){
+         var map_options = {
+           credentials         : "YOUR BING MAPS KEY HERE",
+           center              : new Microsoft.Maps.Location(51.5171, 0.1062),
+           zoom 	       : 10,
+           showMapTypeSelector : false,
+           useInertia          : true,
+           inertiaIntensity    : 0,
+           tileBuffer          : 1,
+           enableSearchLogo    : false,
+           enableClickableLogo : false,
+           showScalebar        : false
+         }
+         map = new Microsoft.Maps.Map(document.getElementById('mapviewer'), map_options);
+         addDefaultTileLayer();
+       }
+
+       function addDefaultTileLayer(){
+         var options = { uriConstructor: 'tiles/{quadkey}.png' };
+         var tileSource = new Microsoft.Maps.TileSource(options);
+         var tilelayer= new Microsoft.Maps.TileLayer({ mercator: tileSource });
+         map.entities.push(tilelayer);
+       }
+      // ]]>
+      </script>
+    </head>
+    <body onload="init();">
+      <div id="mapviewer" style="position:relative;width:100%;height:700px;"></div>
+    </body>
+  </html>
+
+You can apply for a Bing Maps Key at L<https://www.bingmapsportal.com>.
+
 =head1 SEE ALSO
 
 =over
