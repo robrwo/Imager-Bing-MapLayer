@@ -1,8 +1,8 @@
 use Test::Most;
 use if $ENV{AUTHOR_TESTING} || $ENV{RELEASE_TESTING}, 'Test::Warnings';
 
-plan skip_all => 'This test takes a long time run'
-    unless $ENV{AUTHOR_TESTING} || $ENV{RELEASE_TESTING};
+# plan skip_all => 'This test takes a long time run'
+#     unless $ENV{AUTHOR_TESTING} || $ENV{RELEASE_TESTING};
 
 use v5.10.1;
 
@@ -14,7 +14,7 @@ my $cleanup = $ENV{TMP_NO_CLEANUP} ? 0 : 1;
 
 my $image = Imager::Bing::MapLayer->new(
     base_dir => tempdir( CLEANUP => $cleanup ),    #
-    overwrite => 1,
+    overwrite => 0,
     in_memory => 10,
     min_level => 19,
     max_level => 19,
