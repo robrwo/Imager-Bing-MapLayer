@@ -229,14 +229,10 @@ const my %ARG_TO_METHOD => (
     r      => '_translate_radius',
 );
 
-=begin :internal
-
 =head2 C<_translate_point_arguments>
 
 This is an I<internal> utility method for translating coordinate
 parameters from L<Imager> methods.
-
-=end :internal
 
 =cut
 
