@@ -33,6 +33,11 @@ use version 0.77; our $VERSION = version->declare('v0.1.7');
        autosave  => 1,          # automatically save tile when done (default)
     );
 
+=head1 DESCRIPTION
+
+This is the the base tile class for L<Imager::Bing::MapLayer>. It is
+intended for internal use, but can be subclassed as needed.
+
 =head1 ATTRIBUTES
 
 =head2 C<quad_key>
@@ -187,12 +192,20 @@ has 'filename' => (
     init_arg => undef,
 );
 
+=head1 METHODS
+
+=head2 C<build_filename>
+
+This method returns the default filename of the tile, which consists
+of the L</base_dir> and L</quad_key>.  It can be overridden in
+subclasses for map systems that require alternative filenames.
+
+=cut
+
 sub build_filename {
     my ($self) = @_;
     return file( $self->base_dir, $self->quad_key . '.png' )->stringify;
 }
-
-=head1 METHODS
 
 =head2 C<latlon_to_pixel>
 
@@ -234,9 +247,13 @@ sub save {
     }
 }
 
+=begin :internal
+
 =head2 C<DEMOLISH>
 
 This method auto-saves the tile, if L</autosave> is enabled.
+
+=end :internal
 
 =cut
 
