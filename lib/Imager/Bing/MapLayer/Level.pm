@@ -121,7 +121,7 @@ you get C<malloc> errors when rendering tiles.
 has '_max_buffer_breadth' => (
     is      => 'ro',
     isa     => 'Int',
-    default => 1024 * 4,    # TODO
+    default => 1024 * 4,    #
 );
 
 =head1 METHODS

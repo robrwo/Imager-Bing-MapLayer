@@ -172,15 +172,16 @@ has 'levels' => (
         foreach my $level ( $self->min_level .. $self->max_level ) {
             push @levels,
                 Imager::Bing::MapLayer::Level->new(
-                level              => $level,
-                base_dir           => $self->base_dir,
-                centroid_latitude  => $self->centroid_latitude,
-                centroid_longitude => $self->centroid_longitude,
-                overwrite          => $self->overwrite,
-                autosave           => $self->autosave,
-                in_memory          => $self->in_memory,
-                combine            => $self->combine,
-                tile_class         => $self->tile_class,
+                level               => $level,
+                base_dir            => $self->base_dir,
+                centroid_latitude   => $self->centroid_latitude,
+                centroid_longitude  => $self->centroid_longitude,
+                overwrite           => $self->overwrite,
+                autosave            => $self->autosave,
+                in_memory           => $self->in_memory,
+                combine             => $self->combine,
+                tile_class          => $self->tile_class,
+                _max_buffer_breadth => $self->_max_buffer_breadth,
                 );
         }
 
@@ -220,6 +221,21 @@ has 'max_level' => (
 );
 
 =begin internal
+
+=head2 <_max_buffer_breadth>
+
+The maximum width and height of the temporary L<Imager> image.
+
+Generally, you do not need to be concerned with this parameter, unless
+you get C<malloc> errors when rendering tiles.
+
+=cut
+
+has '_max_buffer_breadth' => (
+    is      => 'ro',
+    isa     => 'Int',
+    default => 1024 * 4,    #
+);
 
 =head2 C<_make_imager_wrapper_method>
 

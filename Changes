@@ -10,6 +10,9 @@ Revision history for Imager-Bing-MapLayer
 
   - Reduced size of _max_buffer_breadth to 4096 bytes.
 
+  - _max_buffer_breadth can be configured globally in the MapLayer
+    class.
+
 v0.1.6  2014-09-08 19:06 BST
 
   - Minor POD tweaks/typo fixes.
