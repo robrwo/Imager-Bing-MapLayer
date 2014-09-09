@@ -1,6 +1,6 @@
 Revision history for Imager-Bing-MapLayer
 
-v0.1.7  2014-09-09
+v0.1.7  2014-09-09 19:28 BST
 
   [Incompatabilities]
   - The Tile class now has a build_filename method that can be
