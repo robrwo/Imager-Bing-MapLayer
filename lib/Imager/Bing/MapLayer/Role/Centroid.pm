@@ -12,7 +12,7 @@ Imager::Bing::MapLayer::Role::Centroid - a centroid role
 
 =cut
 
-use version 0.77; our $VERSION = version->declare('v0.1.5');
+use version 0.77; our $VERSION = version->declare('v0.1.6');
 
 =head1 DESCRIPTION
 
@@ -44,4 +44,3 @@ sub _build_centroid_longitude {$LONDON_LONGITUDE}
 use namespace::autoclean;
 
 1;
-
