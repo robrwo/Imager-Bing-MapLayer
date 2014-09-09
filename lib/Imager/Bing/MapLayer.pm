@@ -73,6 +73,8 @@ coordinates.
 The module will automatically map them to the appropriate points on
 tile files.
 
+=for readme stop
+
 It adds the following options to drawing methods:
 
 =over
@@ -86,8 +88,6 @@ The minimum zoom level to draw on.
 The maximum zoom level to draw on.
 
 =back
-
-=for readme stop
 
 =head1 ATTRIBUTES
 
@@ -441,8 +441,6 @@ sub save {
     }
 }
 
-=for readme continue
-
 =head1 VIEWING MAP LAYERS
 
 =head2 Bing Maps
@@ -492,6 +490,8 @@ C<credentials> option with your Bing Maps Key:
   </html>
 
 You can apply for a Bing Maps Key at L<https://www.bingmapsportal.com>.
+
+=for readme continue
 
 =head1 SEE ALSO
 

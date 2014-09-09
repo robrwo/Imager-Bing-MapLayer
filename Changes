@@ -1,5 +1,8 @@
 Revision history for Imager-Bing-MapLayer
 
+  [Documentation]
+  - Fixed POD markup for README generation.
+
 v0.1.7  2014-09-09 19:28 BST
 
   [Incompatabilities]
