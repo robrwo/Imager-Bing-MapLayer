@@ -7,18 +7,13 @@ extends 'Imager::Bing::MapLayer::Tile';
 
 use Path::Class;
 
-has 'filename' => (
-    is      => 'ro',
-    isa     => 'Str',
-    lazy    => 1,
-    default => sub {
-        my ($self) = @_;
-        my $file = file( $self->base_dir, $self->level,
-            join( ',', @{ $self->tile_coords } ) . '.png' );
-        $file->parent->mkpath;
-        return $file->stringify;
-    },
-);
+override build_filename => sub {
+    my ($self) = @_;
+    my $file = file( $self->base_dir, $self->level,
+        join( ',', @{ $self->tile_coords } ) . '.png' );
+    $file->parent->mkpath;
+    return $file->stringify;
+};
 
 package main;
 

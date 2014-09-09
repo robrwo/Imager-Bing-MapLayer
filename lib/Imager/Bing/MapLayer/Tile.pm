@@ -180,15 +180,17 @@ The full pathname of the tile, when saved.
 =cut
 
 has 'filename' => (
-    is      => 'ro',
-    isa     => 'Str',
-    lazy    => 1,
-    default => sub {
-        my ($self) = @_;
-        return file( $self->base_dir, $self->quad_key . '.png' )->stringify;
-    },
+    is       => 'ro',
+    isa      => 'Str',
+    lazy     => 1,
+    builder  => 'build_filename',
     init_arg => undef,
 );
+
+sub build_filename {
+    my ($self) = @_;
+    return file( $self->base_dir, $self->quad_key . '.png' )->stringify;
+}
 
 =head1 METHODS
 

@@ -17,6 +17,9 @@ v0.1.7  2014-09-09
 
   - Miscellaneous cleanup of internals.
 
+  - The Tile class now has a build_filename method that can be
+    overriden when changing the filename.
+
 v0.1.6  2014-09-08 19:06 BST
 
   - Minor POD tweaks/typo fixes.
