@@ -220,7 +220,7 @@ has 'max_level' => (
     default => sub {$MAX_ZOOM_LEVEL},
 );
 
-=begin internal
+=begin :internal
 
 =head2 <_max_buffer_breadth>
 
@@ -264,7 +264,7 @@ The maximum zoom level to draw on.
 
 =back
 
-=end internal
+=end :internal
 
 =cut
 
@@ -416,11 +416,6 @@ sub save {
         $level->save(@args);
     }
 }
-
-=head1 KNOWN ISSUES
-
-For plotting very large polylines and polygons, the system will die
-with no error message.
 
 =for readme continue
 
