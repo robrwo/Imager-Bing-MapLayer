@@ -2,35 +2,47 @@ Revision history for Imager-Bing-MapLayer
 
 v0.1.7  2014-09-09
 
+  [Incompatabilities]
+  - The Tile class now has a build_filename method that can be
+    overriden when changing the filename.
+
+  [Documentation]
+  - Added more documentation.
+
   - Minor POD tweaks.
 
+  - Added sections to Changes.
+
+  [Enhancements]
   - Added errstr method to Imager class.
-
-  - Ignore 0-byte tile files when overwrite is false.
-
-  - Fixed bug with workaround for malloc limitations.
-
-  - Reduced size of _max_buffer_breadth to 4096 bytes.
 
   - _max_buffer_breadth can be configured globally in the MapLayer
     class.
 
-  - Miscellaneous cleanup of internals.
+  [Bug Fixes]
+  - Ignore 0-byte tile files when overwrite is false.
 
-  - The Tile class now has a build_filename method that can be
-    overriden when changing the filename.
+  - Fixed bug with workaround for malloc limitations.
+
+  [Other Changes]
+  - Reduced size of _max_buffer_breadth to 4096 bytes.
+
+  - Miscellaneous cleanup of internals.
 
 v0.1.6  2014-09-08 19:06 BST
 
+  [Documentation]
   - Minor POD tweaks/typo fixes.
 
   - Removed POD from internal modules.
 
+  [Enhancements]
   - Added a workaround for malloc limitations when drawing images that
     are too large.
 
   - Added Cambridge (aka "US") spelling for method names.
 
+  [Bug Fixes]
   - Fixed method name typo.
 
 v0.1.5  2014-07-21
