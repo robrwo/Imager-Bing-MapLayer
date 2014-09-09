@@ -121,7 +121,7 @@ you get C<malloc> errors when rendering tiles.
 has '_max_buffer_breadth' => (
     is      => 'ro',
     isa     => 'Int',
-    default => 8000,
+    default => 1024 * 4,    # TODO
 );
 
 =head1 METHODS
@@ -229,10 +229,14 @@ const my %ARG_TO_METHOD => (
     r      => '_translate_radius',
 );
 
+=begin :internal
+
 =head2 C<_translate_point_arguments>
 
 This is an I<internal> utility method for translating coordinate
 parameters from L<Imager> methods.
+
+=end :internal
 
 =cut
 
@@ -485,20 +489,24 @@ sub _make_imager_wrapper_method {
 
             # TODO - get* methods should be handled differently.
 
-            my ( $this_left, $this_top, $this_right, $this_bottom )
-                = ( $left, $top, $right, $bottom );
+            my ( $this_left, $this_top ) = ( $left, $top, $right, $bottom );
 
-            while ( $this_left <= $this_right ) {
+            while ( $this_left <= $right ) {
 
-                while ( $this_top <= $this_bottom ) {
+                while ( $this_top <= $bottom ) {
 
                     my ( $this_width, $this_height ) = (
-                        min(1 + $this_right - $this_left,
+                        min(1 + $right - $this_left,
                             $self->_max_buffer_breadth
                         ),
-                        min(1 + $this_bottom - $this_top,
+                        min(1 + $bottom - $this_top,
                             $self->_max_buffer_breadth
                         )
+                    );
+
+                    my ( $this_right, $this_bottom ) = (
+                        $this_left + $this_width - 1,
+                        $this_top + $this_height - 1
                     );
 
                     # Note: we cannot catch malloc errors if the image
@@ -577,50 +585,50 @@ sub _make_imager_wrapper_method {
                                     my $crop_top
                                         = max( $this_top, $tile->top );
 
-                                    my $crop = $image->crop(
-                                        left  => $crop_left,
-                                        top   => $crop_top,
-                                        width => 1 + min(
-                                            $this_right - $crop_left,
-                                            $tile->right - $crop_left
-                                        ),
-                                        height => 1 + min(
-                                            $this_bottom - $crop_top,
-                                            $tile->bottom - $crop_top
-                                        ),
+                                    my $crop_width = 1 + min(
+                                        $this_right - $crop_left,
+                                        $tile->right - $crop_left
                                     );
 
-                                    if ($crop) {
+                                    my $crop_height = 1 + min(
+                                        $this_bottom - $crop_top,
+                                        $tile->bottom - $crop_top
+                                    );
 
-                                        $tile->compose(
-                                            src     => $crop,
-                                            left    => $crop_left,
-                                            top     => $crop_top,
-                                            width   => $crop->getwidth,
-                                            height  => $crop->getheight,
-                                            combine => $self->combine,
-                                        );
+                                    my $crop = $image->crop(
+                                        left   => $crop_left,
+                                        top    => $crop_top,
+                                        width  => $crop_width,
+                                        height => $crop_height,
+                                    ) or confess $image->errstr;
 
-                                        $crop = undef
-                                            ;    # force garbage collection
+                                    $tile->compose(
+                                        src     => $crop,
+                                        left    => $crop_left,
+                                        top     => $crop_top,
+                                        width   => $crop->getwidth,
+                                        height  => $crop->getheight,
+                                        combine => $self->combine,
+                                    );
 
-                                        if ( $self->in_memory ) {
+                                    # force garbage collection
+                                    $crop = undef;
 
-                                            $timeouts->{$key}
-                                                = time() + $self->in_memory;
+                                    if ( $self->in_memory ) {
 
-                                            $self->_cleanup_tiles();
+                                        $timeouts->{$key}
+                                            = time() + $self->in_memory;
 
-                                        } else {
+                                        $self->_cleanup_tiles();
 
-                                            # See comments about regarding
-                                            # autosave consistency.
+                                    } else {
 
-                                            $tile->save;
+                                        # See comments about regarding
+                                        # autosave consistency.
 
-                                            $tiles->{$key} = undef;
+                                        $tile->save;
 
-                                        }
+                                        $tiles->{$key} = undef;
 
                                     }
 
