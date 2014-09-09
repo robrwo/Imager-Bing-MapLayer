@@ -36,6 +36,7 @@ build_requires(
 requires(
     'Carp'                         => 0,
     'Class::MOP::Method'           => 0,
+    'Const::Exporter'              => 0,
     'Const::Fast'                  => 0,
     'Cwd'                          => 0,
     'Exporter::Lite'               => 0,
