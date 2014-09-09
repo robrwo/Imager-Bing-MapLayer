@@ -26,7 +26,7 @@ use Imager::Bing::MapLayer::Utils qw/
 use Imager::Bing::MapLayer::Image;
 use Imager::Bing::MapLayer::Tile;
 
-use version 0.77; our $VERSION = version->declare('v0.1.6');
+use version 0.77; our $VERSION = version->declare('v0.1.7');
 
 =head1 NAME
 
@@ -49,6 +49,10 @@ Imager::Bing::MapLayer::Level - zoom levels for Bing Maps
     );
 
 =head1 DESCRIPTION
+
+This module is for internal use by L<Imager::Bing::MapLayer>.
+
+=begin :internal
 
 This module supports drawing on specific zoom levels.
 
@@ -105,16 +109,12 @@ has 'last_cleanup_time' => (
     default => sub { return time; },
 );
 
-=begin :internal
-
 =head2 C<_max_buffer_breadth>
 
 The maximum width and height of the temporary L<Imager> image.
 
 Generally, you do not need to be concerned with this parameter, unless
 you get C<malloc> errors when rendering tiles.
-
-=end :internal
 
 =cut
 
@@ -162,8 +162,6 @@ sub latlon_to_pixel {
     return Imager::Bing::MapLayer::Utils::latlon_to_pixel( $self->level,
         @latlon );
 }
-
-=begin :internal
 
 =head2 C<_translate_points>
 
@@ -229,14 +227,10 @@ const my %ARG_TO_METHOD => (
     r      => '_translate_radius',
 );
 
-=begin :internal
-
 =head2 C<_translate_point_arguments>
 
 This is an I<internal> utility method for translating coordinate
 parameters from L<Imager> methods.
-
-=end :internal
 
 =cut
 
@@ -727,8 +721,6 @@ __PACKAGE__->_make_imager_wrapper_method(
     }
 );
 
-=end :internal
-
 # TODO/FIXME - generic method with callbacks to apply a function to a
 # all tiles on a level?
 
@@ -845,6 +837,10 @@ sub save {
         $tile->save(@args) if ($tile);
     }
 }
+
+=end :internal
+
+=cut
 
 use namespace::autoclean;
 

@@ -17,7 +17,7 @@ use List::Util 1.30 qw/ min pairmap /;
 
 use namespace::autoclean;
 
-use version 0.77; our $VERSION = version->declare('v0.1.6');
+use version 0.77; our $VERSION = version->declare('v0.1.7');
 
 =head1 NAME
 
@@ -32,6 +32,10 @@ Imager::Bing::MapLayer::Image - a wrapper for L<Imager> objects
     );
 
 =head1 DESCRIPTION
+
+This module is for internal use by L<Imager::Bing::MapLayer>.
+
+=begin :internal
 
 This is a base class for images that acts as a wrapper around
 L<Imager> but automatically translates coordinates from the pixel
@@ -275,8 +279,6 @@ sub _translate_point_arguments {
     return %i_args;
 }
 
-=begin :internal
-
 =head2 C<_make_imager_wrapper_method>
 
 Rather than have a lot of cut-and-paste code for wrappers to L<Imager>
@@ -285,8 +287,6 @@ methods, we have a L<Moose> method for creating new methods.
 These methods translate the C<points>, C<x> and C<y> arguments for the
 level into coordinates on the tile, and then run the corresponding
 L<Imager> methods on the tile.
-
-=end :internal
 
 =cut
 
@@ -601,5 +601,11 @@ sub colorize {
     my ( $self, %args ) = @_;
     $self->colourise(%args);
 }
+
+=end :internal
+
+=cut
+
+use namespace::autoclean;
 
 1;

@@ -1,13 +1,19 @@
 package Imager::Bing::MapLayer::Utils;
 
-use v5.10;
+use v5.10.1;
 
 use strict;
 use warnings;
 
-use Exporter::Lite;
+use Carp qw/ confess /;
+use Const::Exporter;
+use Const::Fast;
+use List::MoreUtils qw/ minmax /;
+use POSIX::2008 qw/ round /;
 
-our @EXPORT = qw/ $MIN_ZOOM_LEVEL $MAX_ZOOM_LEVEL $TILE_WIDTH $TILE_HEIGHT /;
+use version 0.77; our $VERSION = version->declare('v0.1.7');
+
+our @EXPORT;
 
 our @EXPORT_OK = (
     @EXPORT,
@@ -19,13 +25,6 @@ our @EXPORT_OK = (
         get_ground_resolution get_map_scale
         /
 );
-
-use Carp qw/ confess /;
-use Const::Fast;
-use List::MoreUtils qw/ minmax /;
-use POSIX::2008 qw/ round /;
-
-use version 0.77; our $VERSION = version->declare('v0.1.6');
 
 =head1 NAME
 
@@ -50,8 +49,10 @@ The width and height of individual tiles.
 
 =cut
 
-const our $TILE_WIDTH  => 256;
-const our $TILE_HEIGHT => 256;
+use Const::Exporter default => [
+    '$TILE_WIDTH'  => 256,
+    '$TILE_HEIGHT' => 256,
+];
 
 =head2 C<$MIN_ZOOM_LEVEL>
 
@@ -61,6 +62,7 @@ The minimum and maximum zoom levels supported by these modules.
 
 Note that C<$MAX_ZOOM_LEVEL> can actually be as high as 23, but that
 causes bit overflows for calculations on 32-bit integers.  We also
+
 don't want to generate tiles beyond level 18, since the amount of
 tiles required is so large that we run out of memory (and we also
 don't need it, since Bing switches to a street view mode).
@@ -71,8 +73,10 @@ than 19 at this time.
 
 =cut
 
-const our $MIN_ZOOM_LEVEL => 1;
-const our $MAX_ZOOM_LEVEL => 19;
+use Const::Exporter default => [
+    '$MIN_ZOOM_LEVEL' => 1,
+    '$MAX_ZOOM_LEVEL' => 19,
+];
 
 # Local constants used by these functions
 
@@ -118,8 +122,7 @@ sub latlon_to_pixel {
 
     return map { round($_) } (
         ( ( $longitude + 180 ) / 360 ) * $width,
-        (   0.5
-                - log( ( 1 + $sin_latitude ) / ( 1 - $sin_latitude ) )
+        (   0.5 - log( ( 1 + $sin_latitude ) / ( 1 - $sin_latitude ) )
                 / ( 4 * $PI )
         ) * $width,
     );
@@ -197,7 +200,9 @@ sub quad_key_to_tile_coords {
 
     my ($quad_key) = @_;
 
-    unless ( $quad_key =~ /^[0-3]{$MIN_ZOOM_LEVEL,$MAX_ZOOM_LEVEL}$/ ) {
+    state $re = qr/^[0-3]{$MIN_ZOOM_LEVEL,$MAX_ZOOM_LEVEL}$/;
+
+    unless ( $quad_key =~ $re ) {
         confess "invalid quad key";
     }
 

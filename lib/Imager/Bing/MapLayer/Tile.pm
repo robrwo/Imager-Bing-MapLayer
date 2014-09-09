@@ -22,7 +22,7 @@ use Imager::Bing::MapLayer::Utils qw/
     tile_coords_to_quad_key quad_key_to_tile_coords
     /;
 
-use version 0.77; our $VERSION = version->declare('v0.1.6');
+use version 0.77; our $VERSION = version->declare('v0.1.7');
 
 =head1 SYNOPSIS
 
@@ -32,6 +32,11 @@ use version 0.77; our $VERSION = version->declare('v0.1.6');
        overwrite => 1,          # overwrite existing tile (default) vs load it
        autosave  => 1,          # automatically save tile when done (default)
     );
+
+=head1 DESCRIPTION
+
+This is the the base tile class for L<Imager::Bing::MapLayer>. It is
+intended for internal use, but can be subclassed as needed.
 
 =head1 ATTRIBUTES
 
@@ -180,17 +185,27 @@ The full pathname of the tile, when saved.
 =cut
 
 has 'filename' => (
-    is      => 'ro',
-    isa     => 'Str',
-    lazy    => 1,
-    default => sub {
-        my ($self) = @_;
-        return file( $self->base_dir, $self->quad_key . '.png' )->stringify;
-    },
+    is       => 'ro',
+    isa      => 'Str',
+    lazy     => 1,
+    builder  => 'build_filename',
     init_arg => undef,
 );
 
 =head1 METHODS
+
+=head2 C<build_filename>
+
+This method returns the default filename of the tile, which consists
+of the L</base_dir> and L</quad_key>.  It can be overridden in
+subclasses for map systems that require alternative filenames.
+
+=cut
+
+sub build_filename {
+    my ($self) = @_;
+    return file( $self->base_dir, $self->quad_key . '.png' )->stringify;
+}
 
 =head2 C<latlon_to_pixel>
 
@@ -232,9 +247,13 @@ sub save {
     }
 }
 
+=begin :internal
+
 =head2 C<DEMOLISH>
 
 This method auto-saves the tile, if L</autosave> is enabled.
+
+=end :internal
 
 =cut
 

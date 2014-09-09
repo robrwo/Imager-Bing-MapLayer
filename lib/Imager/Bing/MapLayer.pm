@@ -26,7 +26,7 @@ Imager::Bing::MapLayer - create a map layer for Bing Maps
 
 =cut
 
-use version 0.77; our $VERSION = version->declare('v0.1.6');
+use version 0.77; our $VERSION = version->declare('v0.1.7');
 
 =head1 SYNOPSIS
 
@@ -73,16 +73,34 @@ coordinates.
 The module will automatically map them to the appropriate points on
 tile files.
 
+It adds the following options to drawing methods:
+
+=over
+
+=item C<-min_level>
+
+The minimum zoom level to draw on.
+
+=item C<-max_level>
+
+The maximum zoom level to draw on.
+
+=back
+
 =for readme stop
 
 =head1 ATTRIBUTES
 
 =head2 C<in_memory>
 
-The timeout for how many seconds a tile is kept in memory.
+The timeout for how many seconds a tile is kept in memory. The default
+is C<0>.
 
 When a tile is timed out, it is saved to disk after each L<Imager> drawing
 operation, and reloaded if it is later needed.
+
+Setting this to a non-zero value keeps tiles in memory, but increases
+the memory requirements.
 
 =head2 C<centroid_latitude>
 
@@ -108,7 +126,19 @@ fills will darken existing points rather than drawing over them.
 
 When true (default), tiles will be automatically saved.
 
-Alternatively, you can use the L</save> method.
+Alternatively, you can use the L</save> method to manually save tiles.
+
+Note that any times in memory when a script is interrupted may be
+lost. An alternative to add something to trap interruptions:
+
+  local $SIG{INT} = sub {
+      state $int = 0;
+      unless ($int) {
+          $int=1;
+          $image->save();
+      }
+      exit 1;
+  };
 
 =head2 C<combine>
 
@@ -131,18 +161,12 @@ You might use something like:
 
   use Path::Class;
 
-  has 'filename' => (
-    is      => 'ro',
-    isa     => 'Str',
-    lazy    => 1,
-    default => sub {
-        my ($self) = @_;
-	my $file = file($self->base_dir, $self->level,
-			join(',', @{ $self->tile_coords }) . '.png');
-        return $file->stringify;
-    },
-  );
-
+  override 'build_filename' => sub {
+    my ($self) = @_;
+    my $file = file($self->base_dir, $self->level,
+	            join(',', @{ $self->tile_coords }) . '.png');
+    return $file->stringify;
+  };
 
 =cut
 
@@ -220,7 +244,7 @@ has 'max_level' => (
     default => sub {$MAX_ZOOM_LEVEL},
 );
 
-=begin internal
+=begin :internal
 
 =head2 <_max_buffer_breadth>
 
@@ -264,7 +288,7 @@ The maximum zoom level to draw on.
 
 =back
 
-=end internal
+=end :internal
 
 =cut
 
@@ -417,12 +441,57 @@ sub save {
     }
 }
 
-=head1 KNOWN ISSUES
-
-For plotting very large polylines and polygons, the system will die
-with no error message.
-
 =for readme continue
+
+=head1 VIEWING MAP LAYERS
+
+=head2 Bing Maps
+
+You can view tiles using the following web page, replacing the
+C<credentials> option with your Bing Maps Key:
+
+  <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+  <html xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml"
+        xml:lang="en" lang="en">
+    <head>
+      <title>Tiles Test</title>
+      <script src="http://ecn.dev.virtualearth.net/mapcontrol/mapcontrol.ashx?v=7.0&mkt=en-gb"></script>
+      <script>
+       //<![CDATA[
+       var map;
+       function init(){
+         var map_options = {
+           credentials         : "YOUR BING MAPS KEY HERE",
+           center              : new Microsoft.Maps.Location(51.5171, 0.1062),
+           zoom 	       : 10,
+           showMapTypeSelector : false,
+           useInertia          : true,
+           inertiaIntensity    : 0,
+           tileBuffer          : 1,
+           enableSearchLogo    : false,
+           enableClickableLogo : false,
+           showScalebar        : false
+         }
+         map = new Microsoft.Maps.Map(document.getElementById('mapviewer'), map_options);
+         addDefaultTileLayer();
+       }
+
+       function addDefaultTileLayer(){
+         var options = { uriConstructor: 'tiles/{quadkey}.png' };
+         var tileSource = new Microsoft.Maps.TileSource(options);
+         var tilelayer= new Microsoft.Maps.TileLayer({ mercator: tileSource });
+         map.entities.push(tilelayer);
+       }
+      // ]]>
+      </script>
+    </head>
+    <body onload="init();">
+      <div id="mapviewer" style="position:relative;width:100%;height:700px;"></div>
+    </body>
+  </html>
+
+You can apply for a Bing Maps Key at L<https://www.bingmapsportal.com>.
 
 =head1 SEE ALSO
 
