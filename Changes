@@ -1,5 +1,7 @@
 Revision history for Imager-Bing-MapLayer
 
+v0.1.7  2014-09-09
+
   - Minor POD tweaks.
 
   - Added errstr method to Imager class.
