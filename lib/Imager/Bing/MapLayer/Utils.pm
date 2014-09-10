@@ -11,7 +11,7 @@ use Const::Fast;
 use List::MoreUtils qw/ minmax /;
 use POSIX::2008 qw/ round /;
 
-use version 0.77; our $VERSION = version->declare('v0.1.7');
+use version 0.77; our $VERSION = version->declare('v0.1.8');
 
 our @EXPORT;
 
