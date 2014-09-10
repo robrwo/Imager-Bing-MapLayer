@@ -1,7 +1,12 @@
 Revision history for Imager-Bing-MapLayer
 
+v0.1.8
   [Documentation]
   - Fixed POD markup for README generation.
+
+  [Tests]
+  - Skip malloc.t test unless running author tests, since it uses too
+    much memory for some cpantesters.
 
 v0.1.7  2014-09-09 19:28 BST
 

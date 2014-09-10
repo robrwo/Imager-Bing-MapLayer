@@ -1,8 +1,8 @@
 use Test::Most;
 use if $ENV{AUTHOR_TESTING} || $ENV{RELEASE_TESTING}, 'Test::Warnings';
 
-# plan skip_all => 'This test takes a long time run'
-#     unless $ENV{AUTHOR_TESTING} || $ENV{RELEASE_TESTING};
+plan skip_all => 'This test takes a long time run'
+    unless $ENV{AUTHOR_TESTING} || $ENV{RELEASE_TESTING};
 
 use v5.10.1;
 
