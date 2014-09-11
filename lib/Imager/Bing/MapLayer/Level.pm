@@ -481,6 +481,10 @@ sub _make_imager_wrapper_method {
             # But we cannot allocate too-large a temporary image, so
             # we still need to draw them in pieces.
 
+            # TODO: use Sys::MemInfo qw/ freemem / to check free
+            # memory, and adjust the temporary tile size
+            # accordingly. (Assume memory req is $width * height * 4)
+
             # TODO - get* methods should be handled differently.
 
             my ( $this_left, $this_top ) = ( $left, $top, $right, $bottom );
