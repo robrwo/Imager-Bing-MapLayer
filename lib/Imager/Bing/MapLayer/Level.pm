@@ -405,22 +405,26 @@ sub _cleanup_tiles {
         my $tiles    = $self->tiles;
         my $timeouts = $self->timeouts;
 
-        foreach my $key ( keys %{$timeouts} ) {
+        foreach my $key (
+            sort { $timeouts->{$a} <=> $timeouts->{$b} }
+            keys %{$timeouts}
+            )
+        {
 
-            if ( $tiles->{$key} && $timeouts->{$key} < $time ) {
+            next unless $tiles->{$key};
 
-                # For some reason, ignoring save when
-                # $self->autosave is true does not seem to
-                # consistently save the tile. So we always save
-                # it.
+            last if $timeouts->{$key} > $time;
 
-                $tiles->{$key}->save;
+            # For some reason, ignoring save when
+            # $self->autosave is true does not seem to
+            # consistently save the tile. So we always save
+            # it.
 
-                $tiles->{$key} = undef;
+            $tiles->{$key}->save;
 
-                delete $timeouts->{$key};
+            $tiles->{$key} = undef;
 
-            }
+            delete $timeouts->{$key};
 
         }
 

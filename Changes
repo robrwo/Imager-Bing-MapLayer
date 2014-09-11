@@ -16,6 +16,8 @@ v0.1.8
   [Other Changes]
   - Clean up tiles from memory before drawing new tiles.
 
+  - Tiles cleaned up in experation order.
+
 v0.1.7  2014-09-09 19:28 BST
 
   [Incompatabilities]

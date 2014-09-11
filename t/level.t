@@ -50,5 +50,7 @@ TODO: {
 
 }
 
+$level->_cleanup_tiles();
+
 done_testing;
 
