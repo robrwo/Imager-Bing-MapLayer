@@ -404,29 +404,26 @@ sub _cleanup_tiles {
 
         foreach my $key ( keys %{$tiles} ) {
 
-            if ( $tiles->{$key} ) {
+            if ( $tiles->{$key} && $timeouts->{$key} < $time ) {
 
-                if ( $timeouts->{$key} < $time ) {
+                # For some reason, ignoring save when
+                # $self->autosave is true does not seem to
+                # consistently save the tile. So we always save
+                # it.
 
-                    # For some reason, ignoring save when
-                    # $self->autosave is true does not seem to
-                    # consistently save the tile. So we always save
-                    # it.
+                $tiles->{$key}->save;
 
-                    $tiles->{$key}->save;
+                $tiles->{$key} = undef;
 
-                    $tiles->{$key} = undef;
-
-                    delete $timeouts->{$key};
-
-                }
+                delete $timeouts->{$key};
 
             }
 
         }
 
-        $self->last_cleanup_time($time);
     }
+
+    $self->last_cleanup_time($time);
 }
 
 =head2 C<_make_imager_wrapper_method>
