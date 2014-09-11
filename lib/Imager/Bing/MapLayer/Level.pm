@@ -99,13 +99,9 @@ has 'timeouts' => (
     default => sub { return {} },
 );
 
-=begin :internal
-
 =head2 C<_last_cleanup_time>
 
 The time that the last tile cleanup was run.
-
-=end :internal
 
 =cut
 
