@@ -1,6 +1,6 @@
 Revision history for Imager-Bing-MapLayer
 
-v0.1.8
+v0.1.8  2014-09-11 19:20 BST
   [Incompatabilities]
   - Renamed "last_cleanup_time" to "_last_cleanup_time", since this
     attribute is intended for internal use. (This probably won't
