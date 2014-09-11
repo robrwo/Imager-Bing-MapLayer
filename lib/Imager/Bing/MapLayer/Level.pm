@@ -398,6 +398,9 @@ sub _cleanup_tiles {
 
     return unless $self->in_memory;
 
+    # TODO: add an optional free memory parameter that tries to delete
+    # tiles until enough memory is freed.
+
     my $time = time;
 
     if ( ( $self->_last_cleanup_time + $self->in_memory ) < $time ) {
