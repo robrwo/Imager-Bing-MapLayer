@@ -8,6 +8,9 @@ v0.1.8
   - Skip malloc.t test unless running author tests, since it uses too
     much memory for some cpantesters.
 
+  [Other Changes]
+  - Clean up tiles from memory before drawing new tiles.
+
 v0.1.7  2014-09-09 19:28 BST
 
   [Incompatabilities]

@@ -467,6 +467,10 @@ sub _make_imager_wrapper_method {
                 $imager_args{$arg} = $args{$arg} if ( exists $args{$arg} );
             }
 
+            # Clean up old tiles before allocating new ones.
+
+            $self->_cleanup_tiles();
+
             my ( $left, $top, $right, $bottom ) = bounding_box(%imager_args);
 
             my ( $width, $height )
@@ -616,8 +620,6 @@ sub _make_imager_wrapper_method {
 
                                         $timeouts->{$key}
                                             = time() + $self->in_memory;
-
-                                        $self->_cleanup_tiles();
 
                                     } else {
 
