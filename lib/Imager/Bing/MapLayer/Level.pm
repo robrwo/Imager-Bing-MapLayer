@@ -99,13 +99,20 @@ has 'timeouts' => (
     default => sub { return {} },
 );
 
-=head2 C<last_cleanup_time>
+=begin :internal
+
+=head2 C<_last_cleanup_time>
+
+The time that the last tile cleanup was run.
+
+=end :internal
 
 =cut
 
-has 'last_cleanup_time' => (
+has '_last_cleanup_time' => (
     is      => 'rw',
     isa     => 'Int',
+    lazy    => 1,
     default => sub { return time; },
 );
 
@@ -397,12 +404,12 @@ sub _cleanup_tiles {
 
     my $time = time;
 
-    if ( ( $self->last_cleanup_time + $self->in_memory ) < $time ) {
+    if ( ( $self->_last_cleanup_time + $self->in_memory ) < $time ) {
 
         my $tiles    = $self->tiles;
         my $timeouts = $self->timeouts;
 
-        foreach my $key ( keys %{$tiles} ) {
+        foreach my $key ( keys %{$timeouts} ) {
 
             if ( $tiles->{$key} && $timeouts->{$key} < $time ) {
 
@@ -423,7 +430,7 @@ sub _cleanup_tiles {
 
     }
 
-    $self->last_cleanup_time($time);
+    $self->_last_cleanup_time($time);
 }
 
 =head2 C<_make_imager_wrapper_method>

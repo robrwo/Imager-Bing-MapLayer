@@ -1,6 +1,11 @@
 Revision history for Imager-Bing-MapLayer
 
 v0.1.8
+  [Incompatabilities]
+  - Renamed "last_cleanup_time" to "_last_cleanup_time", since this
+    attribute is intended for internal use. (This probably won't
+    affect anyone.)
+
   [Documentation]
   - Fixed POD markup for README generation.
 
