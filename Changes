@@ -1,7 +1,22 @@
 Revision history for Imager-Bing-MapLayer
 
+v0.1.8
+  [Incompatabilities]
+  - Renamed "last_cleanup_time" to "_last_cleanup_time", since this
+    attribute is intended for internal use. (This probably won't
+    affect anyone.)
+
   [Documentation]
   - Fixed POD markup for README generation.
+
+  [Tests]
+  - Skip malloc.t test unless running author tests, since it uses too
+    much memory for some cpantesters.
+
+  [Other Changes]
+  - Clean up tiles from memory before drawing new tiles.
+
+  - Tiles cleaned up in experation order.
 
 v0.1.7  2014-09-09 19:28 BST
 

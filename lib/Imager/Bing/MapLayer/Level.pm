@@ -26,7 +26,7 @@ use Imager::Bing::MapLayer::Utils qw/
 use Imager::Bing::MapLayer::Image;
 use Imager::Bing::MapLayer::Tile;
 
-use version 0.77; our $VERSION = version->declare('v0.1.7');
+use version 0.77; our $VERSION = version->declare('v0.1.8');
 
 =head1 NAME
 
@@ -99,13 +99,16 @@ has 'timeouts' => (
     default => sub { return {} },
 );
 
-=head2 C<last_cleanup_time>
+=head2 C<_last_cleanup_time>
+
+The time that the last tile cleanup was run.
 
 =cut
 
-has 'last_cleanup_time' => (
+has '_last_cleanup_time' => (
     is      => 'rw',
     isa     => 'Int',
+    lazy    => 1,
     default => sub { return time; },
 );
 
@@ -395,38 +398,42 @@ sub _cleanup_tiles {
 
     return unless $self->in_memory;
 
+    # TODO: add an optional free memory parameter that tries to delete
+    # tiles until enough memory is freed.
+
     my $time = time;
 
-    if ( ( $self->last_cleanup_time + $self->in_memory ) < $time ) {
+    if ( ( $self->_last_cleanup_time + $self->in_memory ) < $time ) {
 
         my $tiles    = $self->tiles;
         my $timeouts = $self->timeouts;
 
-        foreach my $key ( keys %{$tiles} ) {
+        foreach my $key (
+            sort { $timeouts->{$a} <=> $timeouts->{$b} }
+            keys %{$timeouts}
+            )
+        {
 
-            if ( $tiles->{$key} ) {
+            next unless $tiles->{$key};
 
-                if ( $timeouts->{$key} < $time ) {
+            last if $timeouts->{$key} > $time;
 
-                    # For some reason, ignoring save when
-                    # $self->autosave is true does not seem to
-                    # consistently save the tile. So we always save
-                    # it.
+            # For some reason, ignoring save when
+            # $self->autosave is true does not seem to
+            # consistently save the tile. So we always save
+            # it.
 
-                    $tiles->{$key}->save;
+            $tiles->{$key}->save;
 
-                    $tiles->{$key} = undef;
+            $tiles->{$key} = undef;
 
-                    delete $timeouts->{$key};
-
-                }
-
-            }
+            delete $timeouts->{$key};
 
         }
 
-        $self->last_cleanup_time($time);
     }
+
+    $self->_last_cleanup_time($time);
 }
 
 =head2 C<_make_imager_wrapper_method>
@@ -467,6 +474,10 @@ sub _make_imager_wrapper_method {
                 $imager_args{$arg} = $args{$arg} if ( exists $args{$arg} );
             }
 
+            # Clean up old tiles before allocating new ones.
+
+            $self->_cleanup_tiles();
+
             my ( $left, $top, $right, $bottom ) = bounding_box(%imager_args);
 
             my ( $width, $height )
@@ -481,27 +492,27 @@ sub _make_imager_wrapper_method {
             # But we cannot allocate too-large a temporary image, so
             # we still need to draw them in pieces.
 
+            # TODO: use Sys::MemInfo qw/ freemem / to check free
+            # memory, and adjust the temporary tile size
+            # accordingly. (Assume memory req is $width * height * 4)
+
             # TODO - get* methods should be handled differently.
 
-            my ( $this_left, $this_top ) = ( $left, $top, $right, $bottom );
+            my ( $this_left, $this_top ) = ( $left, $top );
 
             while ( $this_left <= $right ) {
 
+                my $this_width = min( 1 + $right - $this_left,
+                    $self->_max_buffer_breadth );
+
+                my $this_right = $this_left + $this_width - 1;
+
                 while ( $this_top <= $bottom ) {
 
-                    my ( $this_width, $this_height ) = (
-                        min(1 + $right - $this_left,
-                            $self->_max_buffer_breadth
-                        ),
-                        min(1 + $bottom - $this_top,
-                            $self->_max_buffer_breadth
-                        )
-                    );
+                    my $this_height = min( 1 + $bottom - $this_top,
+                        $self->_max_buffer_breadth );
 
-                    my ( $this_right, $this_bottom ) = (
-                        $this_left + $this_width - 1,
-                        $this_top + $this_height - 1
-                    );
+                    my $this_bottom = $this_top + $this_height - 1;
 
                     # Note: we cannot catch malloc errors if the image
                     # is too large. Perl will just exit. See
@@ -613,8 +624,6 @@ sub _make_imager_wrapper_method {
                                         $timeouts->{$key}
                                             = time() + $self->in_memory;
 
-                                        $self->_cleanup_tiles();
-
                                     } else {
 
                                         # See comments about regarding
@@ -641,11 +650,11 @@ sub _make_imager_wrapper_method {
 
                     }
 
-                    $this_top += $self->_max_buffer_breadth;
+                    $this_top += $this_height;
 
                 }
 
-                $this_left += $self->_max_buffer_breadth;
+                $this_left += $this_width;
             }
 
         },

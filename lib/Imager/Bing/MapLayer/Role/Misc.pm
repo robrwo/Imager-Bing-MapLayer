@@ -12,7 +12,7 @@ Imager::Bing::MapLayer::Role::Misc - misc shared attributions
 
 =cut
 
-use version 0.77; our $VERSION = version->declare('v0.1.7');
+use version 0.77; our $VERSION = version->declare('v0.1.8');
 
 =head1 DESCRIPTION
 
