@@ -498,25 +498,21 @@ sub _make_imager_wrapper_method {
 
             # TODO - get* methods should be handled differently.
 
-            my ( $this_left, $this_top ) = ( $left, $top, $right, $bottom );
+            my ( $this_left, $this_top ) = ( $left, $top );
 
             while ( $this_left <= $right ) {
 
+                my $this_width = min( 1 + $right - $this_left,
+                    $self->_max_buffer_breadth );
+
+                my $this_right = $this_left + $this_width - 1;
+
                 while ( $this_top <= $bottom ) {
 
-                    my ( $this_width, $this_height ) = (
-                        min(1 + $right - $this_left,
-                            $self->_max_buffer_breadth
-                        ),
-                        min(1 + $bottom - $this_top,
-                            $self->_max_buffer_breadth
-                        )
-                    );
+                    my $this_height = min( 1 + $bottom - $this_top,
+                        $self->_max_buffer_breadth );
 
-                    my ( $this_right, $this_bottom ) = (
-                        $this_left + $this_width - 1,
-                        $this_top + $this_height - 1
-                    );
+                    my $this_bottom = $this_top + $this_height - 1;
 
                     # Note: we cannot catch malloc errors if the image
                     # is too large. Perl will just exit. See
@@ -654,11 +650,11 @@ sub _make_imager_wrapper_method {
 
                     }
 
-                    $this_top += $self->_max_buffer_breadth;
+                    $this_top += $this_height;
 
                 }
 
-                $this_left += $self->_max_buffer_breadth;
+                $this_left += $this_width;
             }
 
         },
