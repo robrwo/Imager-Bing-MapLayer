@@ -1,7 +1,7 @@
 use Test::Most;
 use if $ENV{AUTHOR_TESTING} || $ENV{RELEASE_TESTING}, 'Test::Warnings';
 
-plan skip_all => 'This test takes a long time run'
+plan skip_all => 'Skipping this until dynamic resizing added'
     unless $ENV{AUTHOR_TESTING} || $ENV{RELEASE_TESTING};
 
 use v5.10.1;
@@ -55,4 +55,3 @@ lives_ok {
 'plot a very large polygon';
 
 done_testing;
-
