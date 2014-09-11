@@ -6,6 +6,10 @@ v0.1.8
     attribute is intended for internal use. (This probably won't
     affect anyone.)
 
+  [Bug Fixes]
+  - Some tiles were incompletely drawn, due to a bug in the malloc
+    fix.
+
   [Documentation]
   - Fixed POD markup for README generation.
 
