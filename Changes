@@ -1,6 +1,6 @@
 Revision history for Imager-Bing-MapLayer
 
-v0.1.9
+v0.1.9  2014-09-14
   [Bug Fixes]
   - Fixed bug in tile cleanup code that led to tiles not being saved.
 
