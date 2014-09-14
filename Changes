@@ -1,5 +1,9 @@
 Revision history for Imager-Bing-MapLayer
 
+v0.1.9  2014-09-14
+  [Bug Fixes]
+  - Fixed bug in tile cleanup code that led to tiles not being saved.
+
 v0.1.8  2014-09-11 19:20 BST
   [Incompatabilities]
   - Renamed "last_cleanup_time" to "_last_cleanup_time", since this

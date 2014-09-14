@@ -431,9 +431,9 @@ sub _cleanup_tiles {
 
         }
 
+        $self->_last_cleanup_time($time);
     }
 
-    $self->_last_cleanup_time($time);
 }
 
 =head2 C<_make_imager_wrapper_method>
