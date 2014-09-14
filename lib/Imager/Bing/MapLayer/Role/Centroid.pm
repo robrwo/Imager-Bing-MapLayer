@@ -12,7 +12,7 @@ Imager::Bing::MapLayer::Role::Centroid - a centroid role
 
 =cut
 
-use version 0.77; our $VERSION = version->declare('v0.1.8');
+use version 0.77; our $VERSION = version->declare('v0.1.9');
 
 =head1 DESCRIPTION
 

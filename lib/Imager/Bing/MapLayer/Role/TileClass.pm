@@ -15,7 +15,7 @@ Imager::Bing::MapLayer::Role::TileClass - a tile class role
 
 =cut
 
-use version 0.77; our $VERSION = version->declare('v0.1.8');
+use version 0.77; our $VERSION = version->declare('v0.1.9');
 
 =head1 DESCRIPTION
 

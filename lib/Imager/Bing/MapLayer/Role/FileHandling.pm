@@ -13,7 +13,7 @@ Imager::Bing::MapLayer::Role::FileHandling - file handling attributes
 
 =cut
 
-use version 0.77; our $VERSION = version->declare('v0.1.8');
+use version 0.77; our $VERSION = version->declare('v0.1.9');
 
 =head1 DESCRIPTION
 
