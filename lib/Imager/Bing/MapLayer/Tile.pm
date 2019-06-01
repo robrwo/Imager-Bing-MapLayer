@@ -251,7 +251,7 @@ sub save {
 
 =head2 C<DEMOLISH>
 
-This method auto-saves the tile, if L</autosave> is enabled.
+This method auto-saves the tile, if L<Imager::Bing::MapLayer/autosave> is enabled.
 
 =end :internal
 

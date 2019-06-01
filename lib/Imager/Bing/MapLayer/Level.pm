@@ -389,7 +389,7 @@ sub _load_tile {
     $level->_cleanup_tiles();
 
 This is an I<internal> method that removes tiles from memory that have
-not been drawn to within the L</in_memory> timeout.
+not been drawn to within the L<Imager::Bing::MapLayer/in_memory> timeout.
 
 =cut
 
@@ -445,7 +445,7 @@ Basically, it calculates the bounding box for whatever is to be drawn, and creat
 L<Imager::Bing::MapLayer::Image> "pseudo-tile" to draw on.
 
 It then composes pieces from the pseudo tile onto the actual tile
-(using the L</combine> method>).
+(using the L<Imager::Bing::MapLayer/combine> method>).
 
 =cut
 
