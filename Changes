@@ -1,5 +1,9 @@
 Revision history for Imager-Bing-MapLayer
 
+{{$NEXT}}
+  [Documentation]
+  - Fixed incorrect POD links, @manwar++.
+
 v0.1.9  2014-09-14
   [Bug Fixes]
   - Fixed bug in tile cleanup code that led to tiles not being saved.
